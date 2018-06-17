@@ -23,6 +23,7 @@ namespace ProjetoJornal
             container.Options.DefaultScopedLifestyle = new WebRequestLifestyle();
             // Register your types, for instance:
             container.Register<ISiteRepository, SiteRepository>(Lifestyle.Scoped);
+            container.Register<ILoginService, LoginService>(Lifestyle.Scoped);
             container.Register<SiteContext>(Lifestyle.Scoped);
             container.Register(typeof(IUnitOfWork<>), typeof(UnitOfWork<>), Lifestyle.Scoped);
             // This is an extension method from the integration package.

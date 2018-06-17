@@ -1,10 +1,35 @@
 ﻿
-@model  ProjetoJornal.Areas.Admin.ViewModel.ListarNoticiasModel
+@using PagedList.Mvc
+@model  PagedList.IPagedList<ProjetoJornal.Areas.Admin.ViewModel.ListarNoticiasModel>
+<style>
+    ul.pagination {
+        margin-bottom: 40px;
+    }
+
+        ul.pagination li {
+            display: inline-block;
+        }
+
+            ul.pagination li a {
+                padding: 6px 14px;
+                color: #565656;
+                font-size: 12px;
+                font-family: "Open Sans", sans-serif;
+                border: 1px solid #f1f1f1;
+            }
+
+                ul.pagination li a.active {
+                    border: 1px solid #a1a1a1;
+                }
+
+                ul.pagination li a:hover {
+                    background: #00A7B3;
+                    border: 1px solid transparent;
+                    color: #fff;
+                }
+</style>
 <div class="row">
     <div class="col-md-12">
-        <p>
-            @ViewBag.Result.Mensagem
-        </p>
         <div class="portlet light">
             <div class="portlet-title">
                 <div class="caption">
@@ -15,7 +40,7 @@
                 <a class="btn default pull-right" href="@Url.Action("Cadastrar", "Noticias")?idNoticia=0">
                     <i class="fa fa-image"></i> Cadastrar Notícia
                 </a>
-               @*@Html.ActionLink("Cadastrar Notícia", "Cadastrar", "Noticias", new { idNoticia = 0 }, new { area = "Admin" })*@
+                @*@Html.ActionLink("Cadastrar Notícia", "Cadastrar", "Noticias", new { idNoticia = 0 }, new { area = "Admin" })*@
             </div>
             <div class="tab-pane active" id="tab_1">
                 <div class="portlet box blue">
@@ -30,54 +55,54 @@
                     </div>
                     <div class="portlet-body form">
                         <!-- BEGIN FORM-->
-                        <form class="horizontal-form" >
+                        <form class="horizontal-form" action="@Url.Action("Index", "Noticias")" method="post">
                             <div class="form-actions">
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Categoria</label>
-                                        <select class="form-control" id="selCategoria" placeholder="Selecione uma categoria" name="idCategoria">
-                                            <option value="0">Selecione uma categoria</option>
-                                            @foreach (var categoria in Model.CategoriasListar)
-                                            {
-                                                <option value="@categoria.IdCategoria%>">@categoria.Nome</option>
-                                            }
+                                        <select class="form-control" id="selCategoria" placeholder="Selecione uma categoria" name="IdCategoria">
+                                            @*<option value="0">Selecione uma categoria</option>
+                                                @foreach (var categoria in Model.CategoriasListar)
+                                                {
+                                                    <option value="@categoria.IdCategoria%>">@categoria.Nome</option>
+                                                }*@
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Autor</label>
-                                        <select class="form-control" id="selAutor" aria-placeholder="Selecione um autor" name="idAutor">
-                                            <option value="0">Selecione um autor</option>
-                                            @foreach (var autor in Model.AutoresListar)
-                                            {
-                                                <option value="@autor.IdAutor%>">@autor.Nome</option>
-                                            }
+                                        <select class="form-control" id="selAutor" aria-placeholder="Selecione um autor" name="IdAutor">
+                                            @*<option value="0">Selecione um autor</option>
+                                                @foreach (var autor in Model.AutoresListar)
+                                                {
+                                                    <option value="@autor.IdAutor%>">@autor.Nome</option>
+                                                }*@
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Título</label>
-                                        <input type="text" class="form-control" placeholder="Buscar pelo título" name="titulo" id="titulo">
+                                        <input type="text" class="form-control" placeholder="Buscar pelo título" name="Titulo" id="titulo">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Filtrar por período</label>
                                         <div class="input-group input-large date-picker input-daterange" id="datepicker1" data-date="10/11/2012" data-date-format="dd/mm/yyyy">
-                                            <input type="text" class="form-control" name="from" id="dtinicial">
+                                            <input type="text" class="form-control" name="DataFinal" id="dtinicial">
                                             <span class="input-group-addon">
-                                                to
+                                                até
                                             </span>
-                                            <input type="text" class="form-control" name="to" id="dtfinal">
+                                            <input type="text" class="form-control" name="DataInicial" id="dtfinal">
                                         </div>
 
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <button type="button" class="btn blue pull-right" onclick="pesquisar();"><i class="fa fa-search"></i> Pesquisar</button>
+                                        <button type="submit" class="btn blue pull-right"><i class="fa fa-search"></i> Pesquisar</button>
                                     </div>
                                 </div>
                             </div>
@@ -87,59 +112,102 @@
                 </div>
             </div>
             <br>
-           @if (Model.NoticiasListar.Count == 0)
-           {
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="alert alert-info">
-                        <strong>Atenção!</strong> Nenhum resultado encontrado para a busca realizada.
+            @if (Model.Count == 0)
+            {
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="alert alert-info">
+                            <strong>Atenção!</strong> Nenhum resultado encontrado para a busca realizada.
+                        </div>
                     </div>
                 </div>
-            </div>
-           }
-           @foreach (var item in Model.NoticiasListar) { 
-            <div class="news-blocks">
-                <h3>
-                    <a href="@Url.Action("Cadastrar", "Noticias")?idNoticia=@item.Id">
-                        @item.Titulo
-                    </a>
-                </h3>
-                <div class="news-block-tags">
+            }
+            @foreach (var item in Model)
+            {
+                <div class="news-blocks">
+                    <h3>
+                        <a href="@Url.Action("Cadastrar", "Noticias")?idNoticia=@item.Id">
+                            @item.Titulo
+                        </a>
+                    </h3>
+                    <div class="news-block-tags">
+                        @if (item.Status == "A")
+                        {
+                            <span class="label label-primary">Aguardando Publicação</span>
+                        }
+                        else
+                        {
+                            <span class="label label-success">Publicado</span>
+                        }
+                        <span class="badge badge-default">
+                            @item.Categoria
+                        </span>
+                        <span> <i class="fa fa-user"></i> @item.Autor</span>
+                        <span>
+                            <i class="fa fa-calendar"></i>
+                            @item.Data
+                        </span>
+                    </div>
+                    <p>
+                        @item.CorpoSubString
+                    </p>
+                    <a class="btn btn-outline btn-success dim" href="@Url.Action("Cadastrar", "Noticias")?idNoticia=@item.Id"><i class="fa fa-upload"></i> Editar notícia</a>
                     @if (item.Status == "A")
                     {
-                        <span class="label label-primary">Aguardando Publicação</span>
+                        <a class="btn btn-outline btn-info dim" href="@Url.Action("Publicar", "Noticias")?idNoticia=@item.Id"><i class="fa fa-globe"></i> Publicar notícia</a>
                     }
-                    else { 
-                        <span class="label label-success">Publicado</span>
-                    }
-                    <span class="badge badge-default">
-                        @item.Categoria
-                    </span>
-                    <span> <i class="fa fa-user"></i> @item.Autor</span>
-                    <span>
-                        <i class="fa fa-calendar"></i>
-                        @item.Data
-                    </span>
                 </div>
-                <p>
-                    @item.CorpoSubString
-                </p>
-                <a class="btn btn-outline btn-success dim" href="@Url.Action("Cadastrar", "Noticias")?idNoticia=@item.Id"><i class="fa fa-upload"></i> Editar notícia</a>
-                @if(item.Status == "A") { 
-                    <a class="btn btn-outline btn-info dim" href="@Url.Action("Publicar", "Noticias")?idNoticia=@item.Id"><i class="fa fa-globe"></i> Publicar notícia</a>
-                 }
-            </div>
+            }
+            @if (ViewBag.ItensEncontrados > 0)
+            {
+                <div class="pagination" style="margin-left: 400px">
+                    Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
+                </div>
+            }
+            <br />
+            @if (Model.HasNextPage || Model.HasPreviousPage)
+            {
+                <div style="text-align: center">
+                    @Html.PagedListPager(Model, (page) => Url.Action("Index", new { page = page, busca = @ViewBag.Busca }), PagedListRenderOptions.Classic)
+                </div>
             }
         </div>
     </div>
 </div>
-<br/>
+<br />
 
+@section Scripts {
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            popularAutores();
+            popularCategorias();
+        });
 
-<!-- BEGIN CORE PLUGINS -->
-<script type="text/javascript">
-
-     function pesquisar() {
+        function popularAutores() {
+            $.ajax({
+                url: "@Url.Action("Autores", "Noticias")",
+                success: function (data) {
+                    $("#selAutor").empty();
+                    $("#selAutor").append('<option value="0">Selecione...</option>');
+                    $.each(data, function (index, element) {
+                        $("#selAutor").append('<option value="' + element.IdAutor + '">' + element.Nome + '</option>');
+                    });
+                }
+            });
+        }
+         function popularCategorias() {
+            $.ajax({
+                url: "@Url.Action("Categorias", "Noticias")",
+                success: function (data) {
+                    $("#selCategoria").empty();
+                    $("#selCategoria").append('<option value="0">Selecione...</option>');
+                    $.each(data, function (index, element) {
+                        $("#selCategoria").append('<option value="' + element.IdCategoria + '">' + element.Nome + '</option>');
+                    });
+                }
+            });
+        }
+        function pesquisar() {
          var model = {
                 IdCategoria: parseInt($("#selCategoria").val()),
                 IdAutor: parseInt($("#selAutor").val()),
@@ -194,4 +262,6 @@
             }
         }
     });
-</script>
+    </script>
+}
+

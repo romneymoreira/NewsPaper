@@ -11,8 +11,14 @@ namespace ProjetoJornal
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js"));
 
+            bundles.Add(new StyleBundle("~/bundles/logincss").Include(
+                        "~/Areas/Admin/Assets/admin/pages/css/login.css"));
+
+            bundles.Add(new ScriptBundle("~/bundles/loginjs").Include(
+                      "~/Areas/Admin/Assets/admin/pages/scripts/login.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
-                        "~/Scripts/jquery.validate*"));
+                       "~/Scripts/jquery.validate*"));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at https://modernizr.com to pick only the tests you need.
@@ -91,7 +97,7 @@ namespace ProjetoJornal
                    "~/Areas/Admin/Assets/global/plugins/dropzone/dropzone.js",
                    "~/Areas/Admin/Assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"
                    ));
-            
+
 
             bundles.Add(new ScriptBundle("~/Areas/Admin/Assets/admin/layout3/scripts").Include(
                 "~/Areas/Admin/Assets/global/plugins/bootstrap-toastr/toastr.min.js",

@@ -37,7 +37,7 @@ color: #fff;
                 <!-- Posts-block -->
                 <div class="posts-block standard-box">
                     <div class="title-section">
-                        <h1>@Model.Count() Resultados para a busca</h1>
+                        <h1>@ViewBag.ItensEncontrados Resultados para a busca</h1>
                     </div>
                     @foreach (var item in @Model)
                     {
@@ -46,7 +46,7 @@ color: #fff;
                                 <h2><a href="@Url.Action("Post", "Home")?id=@item.Id">@item.Titulo</a></h2>
                                 <ul class="post-tags">
                                     <li><i class="lnr lnr-user"></i>por <a href="#">@item.Autor</a></li>
-                                    <li><i class="lnr lnr-eye"></i>@item.Visualizacoes Views</li>
+                                    <li><i class="lnr lnr-eye"></i>@item.Visualizacoes visualizações</li>
                                 </ul>
                                 <p>
                                     @item.CorpoSubString
@@ -55,9 +55,12 @@ color: #fff;
                             </div>
                         </div>
                     }
-                    <div class="pagination" style="margin-left: 400px">
-                        Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount   
-                    </div>
+                    @if (ViewBag.ItensEncontrados > 0)
+                    {
+                        <div class="pagination" style="margin-left: 400px">
+                            Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount   
+                        </div>
+                    }
                     <br />
                     @if (Model.HasNextPage || Model.HasPreviousPage)
                     {

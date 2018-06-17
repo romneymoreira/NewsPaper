@@ -7,19 +7,7 @@ namespace ProjetoJornal.Areas.Admin.ViewModel
 {
     public class ListarNoticiasModel
     {
-        public ListarNoticiasModel()
-        {
-            NoticiasListar = new List<ViewModel.NoticiasListar>();
-            AutoresListar = new List<ViewModel.AutoresListar>();
-            CategoriasListar = new List<ViewModel.CategoriasListar>();
-        }
-        public List<NoticiasListar> NoticiasListar { get; set; }
-        public List<CategoriasListar> CategoriasListar { get; set; }
-        public List<AutoresListar> AutoresListar { get; set; }
-
-    }
-    public class NoticiasListar
-    {
+        public ListarNoticiasModel() { }
         public int Id { get; set; }
         public int IdCategoria { get; set; }
         public string Categoria { get; set; }
@@ -33,5 +21,6 @@ namespace ProjetoJornal.Areas.Admin.ViewModel
         public string Status { get; set; }
         public string VaiParaHome { get; set; }
         public string FotoHome { get; set; }
+
     }
 }

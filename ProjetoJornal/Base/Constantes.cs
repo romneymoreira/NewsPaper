@@ -18,7 +18,7 @@ namespace ProjetoJornal.Base
         public const string UrlImagens = "http://localhost:57914/Areas/Admin/Upload/";
         public const string UrlProjeto = "http://localhost:57914";
 
-        public const int PageSize = 2;
+        public const int PageSize = 10;
         public const int PageIndex = 1;
     }
 }

@@ -1,0 +1,12 @@
+﻿@model ProjetoJornal.ViewModel.IndexModel
+<div class="widget news-widget">
+    <h1>Últimas por título...</h1>
+    <ul class="list-news">
+        @foreach (var item in Model.UltimasHoje)
+        {
+            <li>
+                <h2><a href="@Url.Action("Post", "Home")?id=@item.IdNoticia">@item.Titulo</a></h2>
+            </li>
+        }
+    </ul>
+</div>

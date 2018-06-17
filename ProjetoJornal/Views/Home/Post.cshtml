@@ -35,9 +35,8 @@
                 <!-- Sidebar -->
                 <div class="sidebar theiaStickySidebar">
                     <div class="search-widget widget">
-                        <form action="@Url.Action("Busca", "Home")" method="post">
+                        <form action="@Url.Action("Busca", "Home")" method="get">
                             <input type="search" name="busca" placeholder="Procuro por..." />
-                            <input type="hidden" name="page" value="1" />
                             <button type="submit">
                                 <i class="fa fa-search"></i>
                             </button>

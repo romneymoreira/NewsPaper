@@ -30,38 +30,13 @@ namespace ProjetoJornal.Controllers
         public ActionResult Index()
         {
             var home = new IndexModel();
-            string caminho = AppDomain.CurrentDomain.BaseDirectory + "\\Uploads\\minions.jpg";
             try
             {
-
-
                 var noticias = _repository.ListarNoticiasHome();
-                foreach (var item in noticias)
-                {
-                    home.Ultimas.Add(new UltimasModel
-                    {
-                        Categoria = item.Categoria.Descricao,
-                        ClasseCategoria = item.Categoria.Classe,
-                        Foto = item.FotoHome,
-                        IdNoticia = item.Id,
-                        Titulo = item.Titulo,
-                        Autor = item.Autor.Nome,
-                        Corpo = _funcoes.RemoveTagsHTML(item.Corpo),
-                        FotoByte = GetResizedImage(caminho, Constantes.ImagemW400, Constantes.ImagemH250)
-                    });
-                    home.MaisVisualizadas.Add(new MaisVisualizadasModel
-                    {
-                        Categoria = item.Categoria.Descricao,
-                        ClasseCategoria = item.Categoria.Classe,
-                        Foto = item.FotoHome,
-                        IdNoticia = item.Id,
-                        Titulo = item.Titulo,
-                        Autor = item.Autor.Nome,
-                        Corpo = _funcoes.RemoveTagsHTML(item.Corpo),
-                        FotoByte = GetResizedImage(caminho, Constantes.ImagemW400, Constantes.ImagemH250)
-                    });
-                }
+                home.Ultimas = UltimasNoticias();
+                home.MaisVisualizadas = MaisVisualizadas();
                 home.Slides = ListarSlides();
+                home.UltimasHoje = ListarUltimasHoje();
             }
             catch (Exception ex)
             {
@@ -69,7 +44,77 @@ namespace ProjetoJornal.Controllers
             }
             return View(home);
         }
-        [HttpPost]
+
+        private string RetornaImagem(string imagem, string tamanho)
+        {
+            string result = "";
+            if (!string.IsNullOrEmpty(imagem))
+            {
+                string[] foto = imagem.Split('_');
+                string[] extensao = imagem.Split('.');
+
+                result = foto[0] + "_" + tamanho + "." + extensao[1];
+            }
+            return result;
+        }
+
+        private List<UltimasModel> UltimasNoticias()
+        {
+            var model = new List<UltimasModel>();
+            var noticias = _repository.ListarUltimasNoticias();
+
+            foreach (var item in noticias)
+            {
+                string corpo = _funcoes.RemoveTagsHTML(item.Corpo);
+                model.Add(new UltimasModel
+                {
+                    Categoria = item.Categoria.Descricao,
+                    ClasseCategoria = item.Categoria.Classe,
+                    FotoHome = item.FotoHome,
+                    IdNoticia = item.Id,
+                    Titulo = item.Titulo,
+                    Autor = item.Autor.Nome,
+                    CorpoSubstring = _funcoes.RetornarSubString(150, corpo),
+                    Corpo = corpo,
+                    Visualizacoes = item.Visualizacoes.Quantidade
+                });
+            }
+
+            return model;
+        }
+
+        private List<MaisVisualizadasModel> MaisVisualizadas()
+        {
+            var model = new List<MaisVisualizadasModel>();
+            var noticias = _repository.ListarNoticiasMaisVisualizadas();
+            
+            foreach (var item in noticias)
+            {
+                string corpo = _funcoes.RemoveTagsHTML(item.Corpo);
+
+                model.Add(new MaisVisualizadasModel
+                {
+                    Categoria = item.Categoria.Descricao,
+                    ClasseCategoria = item.Categoria.Classe,
+                    FotoHome = item.FotoHome,//RetornaImagem(item.FotoHome, "80x80"),
+                    IdNoticia = item.Id,
+                    Titulo = item.Titulo,
+                    Autor = item.Autor.Nome,
+                    Corpo = _funcoes.RetornarSubString(200, corpo),
+                    CorpoSubstring = corpo,
+                    Visualizacoes = item.Visualizacoes.Quantidade
+                });
+            }
+
+            return model;
+        }
+
+        private List<UltimasHojeModel> ListarUltimasHoje()
+        {
+            return _repository.ListarNoticiasHoje();
+        }
+
+        [HttpGet]
         public ActionResult Busca(int? page, string busca)
         {
             int pageSize = Constantes.PageSize;
@@ -102,6 +147,7 @@ namespace ProjetoJornal.Controllers
             }
 
             ViewBag.Busca = busca;
+            ViewBag.ItensEncontrados = model.Count;
 
             result = model.ToPagedList(pageIndex, pageSize);
 

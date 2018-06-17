@@ -1,4 +1,5 @@
-﻿using ProjetoJornal.Mapping;
+﻿using ProjetoJornal.Areas.Admin.Models;
+using ProjetoJornal.Mapping;
 using ProjetoJornal.Models;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace ProjetoJornal.Context
             Database.SetInitializer<SiteContext>(null);
         }
         public DbSet<Noticia> Noticia { get; set; }
+        public DbSet<Usuario> Usuario { get; set; }
         public DbSet<Visualizacoes> Visualizacoes { get; set; }
         public DbSet<Autor> Autor { get; set; }
         public DbSet<Categoria> Categoria { get; set; }
@@ -33,6 +35,7 @@ namespace ProjetoJornal.Context
             modelBuilder.Configurations.Add(new VisualizacoesMap());
             modelBuilder.Configurations.Add(new AutorMap());
             modelBuilder.Configurations.Add(new CategoriaMap());
+            modelBuilder.Configurations.Add(new UsuarioMap());
         }
     }
 }
