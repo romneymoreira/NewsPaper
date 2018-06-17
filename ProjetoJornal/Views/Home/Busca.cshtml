@@ -1,0 +1,74 @@
+﻿@using PagedList.Mvc
+@model  PagedList.IPagedList<ProjetoJornal.ViewModel.BuscaAvancadaSiteModel>
+<!-- content-section
+            ================================================== -->
+<style>
+ul.pagination {
+margin-bottom: 40px;
+}
+
+ul.pagination li {
+display: inline-block;
+}
+
+ul.pagination li a {
+padding: 6px 14px;
+color: #565656;
+font-size: 12px;
+font-family: "Open Sans", sans-serif;
+border: 1px solid #f1f1f1;
+}
+
+ul.pagination li a.active {
+border: 1px solid #a1a1a1;
+}
+
+ul.pagination li a:hover {
+background: #00A7B3;
+border: 1px solid transparent;
+color: #fff;
+}
+</style>
+<section id="content-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+
+                <!-- Posts-block -->
+                <div class="posts-block standard-box">
+                    <div class="title-section">
+                        <h1>@Model.Count() Resultados para a busca</h1>
+                    </div>
+                    @foreach (var item in @Model)
+                    {
+                        <div class="news-post large-post">
+                            <div class="post-content">
+                                <h2><a href="@Url.Action("Post", "Home")?id=@item.Id">@item.Titulo</a></h2>
+                                <ul class="post-tags">
+                                    <li><i class="lnr lnr-user"></i>por <a href="#">@item.Autor</a></li>
+                                    <li><i class="lnr lnr-eye"></i>@item.Visualizacoes Views</li>
+                                </ul>
+                                <p>
+                                    @item.CorpoSubString
+                                </p>
+                                <a class="read-more" href="@Url.Action("Post", "Home")?id=@item.Id">Leia mais <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+                            </div>
+                        </div>
+                    }
+                    <div class="pagination" style="margin-left: 400px">
+                        Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount   
+                    </div>
+                    <br />
+                    @if (Model.HasNextPage || Model.HasPreviousPage)
+                    {
+                        <div style="text-align: center">
+                            @Html.PagedListPager(Model, (page) => Url.Action("Busca", new { page = page, busca = @ViewBag.Busca }), PagedListRenderOptions.Classic)
+                        </div>
+                    }
+                </div>
+                <!-- End Posts-block -->
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End content section -->

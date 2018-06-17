@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo Administrador</title>
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css">
+    @Styles.Render("~/Areas/Admin/Assets/global/css")
+    @Styles.Render("~/Areas/Admin/Assets/admin/layout3/css")
+
+    @Scripts.Render("~/Areas/Admin/Assets/global/plugins/jquery.min")
+    @Scripts.Render("~/Areas/Admin/Assets/global/plugins/jquery-migrate.min")
+    @Scripts.Render("~/Areas/Admin/Assets/global/plugins/jquery-ui")
+    @Scripts.Render("~/Areas/Admin/Assets/global/plugins/bootstrap")
+    @Scripts.Render("~/Areas/Admin/Assets/admin/layout3/scripts")
+
+    @RenderSection("scripts", required: false)
+</head>
+<body>
+    <!-- BEGIN PAGE CONTAINER -->
+    <!-- BEGIN PAGE HEAD -->
+    @Html.Partial("~/Areas/Admin/Views/Shared/_Header.cshtml")
+    <!-- END PAGE HEAD -->
+    <!-- BEGIN PAGE CONTAINER -->
+    <div class="page-container">
+        <!-- BEGIN PAGE HEAD -->
+        <div class="page-head">
+            <div class="container">
+                <!-- BEGIN PAGE TITLE -->
+                <div class="page-title">
+                    <h1>Dashboard <small>statistics & reports</small></h1>
+                </div>
+                <!-- END PAGE TITLE -->
+            </div>
+        </div>
+        <!-- END PAGE HEAD -->
+        <!-- BEGIN PAGE CONTENT -->
+        <div class="page-content">
+            <div class="container">
+                @RenderBody()
+            </div>
+        </div>
+        <!-- END PAGE CONTENT -->
+    </div>
+    <!-- END PAGE CONTAINER -->
+    <!-- BEGIN PRE-FOOTER -->
+    @Html.Partial("~/Areas/Admin/Views/Shared/_Footer.cshtml")
+    <!-- END PRE-FOOTER -->
+
+   
+
+    @section Scripts {
+        <script type="text/javascript">
+            jQuery(document).ready(function () {
+                Metronic.init(); // init metronic core componets
+                Layout.init(); // init layout
+                Demo.init(); // init demo(theme settings page)
+                QuickSidebar.init(); // init quick sidebar
+                Index.init(); // init index page
+                Tasks.initDashboardWidget(); // init tash dashboard widget
+                UIToastr.init();            });
+        </script>
+    }
+</body>
+</html>

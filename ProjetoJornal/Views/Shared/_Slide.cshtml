@@ -1,0 +1,45 @@
+﻿@model ProjetoJornal.ViewModel.IndexModel
+<div class="slider-news">
+    <div class="flexslider">
+        <ul class="slides">
+            @foreach (var item in Model.Slides)
+            {
+                <li>
+                    @if (item.FotoByte != null)
+                    {
+                        var base64 = Convert.ToBase64String(item.FotoByte);
+                        var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                        <img src="@imgSrc" alt="" />
+                    }
+                    else
+                    {
+                        <img alt="" src="@item.Foto" />
+                    }
+                    <div class="slider-caption">
+                        <a href="#" class="@item.ClasseCategoria">
+                            @item.Categoria
+                        </a>
+                        <h2><a href="@Url.Action("Post", "Home")?id=@item.IdNoticia">@item.Titulo</a></h2>
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script type="text/javascript">
+    $(document).ready(function () {
+        /*-------------------------------------------------*/
+        /* =  flexslider
+        /*-------------------------------------------------*/
+        var SliderPost = $('.flexslider');
+
+        SliderPost.flexslider({
+            slideshowSpeed: 10000,
+            easing: "swing"
+        });
+    });
+    </script>
+}

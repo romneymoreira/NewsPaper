@@ -1,0 +1,173 @@
+﻿<!-- BEGIN HEADER -->
+<div class="page-header">
+    <!-- BEGIN HEADER TOP -->
+    <div class="page-header-top">
+        <div class="container">
+            <!-- BEGIN LOGO -->
+            <div class="page-logo">
+                <a href="index.html"><img src="../../assets/admin/layout3/img/logo-default.png" alt="logo" class="logo-default"></a>
+            </div>
+            <!-- END LOGO -->
+            <!-- BEGIN RESPONSIVE MENU TOGGLER -->
+            <a href="javascript:;" class="menu-toggler"></a>
+            <!-- END RESPONSIVE MENU TOGGLER -->
+            <!-- BEGIN TOP NAVIGATION MENU -->
+            <div class="top-menu">
+                <ul class="nav navbar-nav pull-right">
+                    <!-- BEGIN USER LOGIN DROPDOWN -->
+                    <li class="dropdown dropdown-user dropdown-dark">
+                        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                            <img alt="" class="img-circle" src="../../assets/admin/layout3/img/avatar9.jpg">
+                            <span class="username username-hide-mobile">Nick</span>
+                        </a>
+                    </li>
+                    <!-- END USER LOGIN DROPDOWN -->
+                    <!-- BEGIN USER LOGIN DROPDOWN -->
+                    <li class="dropdown dropdown-extended quick-sidebar-toggler">
+                        <span class="sr-only">Toggle Quick Sidebar</span>
+                        <i class="icon-logout"></i>
+                    </li>
+                    <!-- END USER LOGIN DROPDOWN -->
+                </ul>
+            </div>
+            <!-- END TOP NAVIGATION MENU -->
+        </div>
+    </div>
+    <!-- END HEADER TOP -->
+    <!-- BEGIN HEADER MENU -->
+    <div class="page-header-menu">
+        <div class="container">
+            <!-- BEGIN MEGA MENU -->
+            <!-- DOC: Apply "hor-menu-light" class after the "hor-menu" class below to have a horizontal menu with white background -->
+            <!-- DOC: Remove data-hover="dropdown" and data-close-others="true" attributes below to disable the dropdown opening on mouse hover -->
+            <div class="hor-menu ">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="index.html">Dashboard</a>
+                    </li>
+                    <li class="menu-dropdown mega-menu-dropdown ">
+                        <a data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle">
+                            Cadastros <i class="fa fa-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu" style="min-width: 710px">
+                            <li>
+                                <div class="mega-menu-content">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <ul class="mega-menu-submenu">
+                                                <li>
+                                                    <h3>Notícias</h3>
+                                                </li>
+                                                <li>
+                                                    @Html.ActionLink("Listar Notícias", "Index", "Noticias", new { area = "Admin" }, null)
+                                                </li>
+                                                <li>
+                                                    @Html.ActionLink("Cadastrar Notícia", "Cadastrar", "Noticias", new { idNoticia = 0 }, new { area = "Admin" })
+                                                </li>
+                                                <li>
+                                                    <a href="ecommerce_orders_view.html" class="iconify">
+                                                        <i class="icon-tag"></i>
+                                                        Order View
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="ecommerce_products.html" class="iconify">
+                                                        <i class="icon-handbag"></i>
+                                                        Manage Products
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="ecommerce_products_edit.html" class="iconify">
+                                                        <i class="icon-pencil"></i>
+                                                        Product Edit
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <ul class="mega-menu-submenu">
+                                                <li>
+                                                    <h3>Categorias</h3>
+                                                </li>
+                                                <li>
+                                                    @Html.ActionLink("Listar Categorias", "Index", "Categoria", new { area = "Admin" }, null)
+                                                </li>
+                                                <li>
+                                                    <a href="ecommerce_orders.html" class="iconify">
+                                                        <i class="icon-basket"></i>
+                                                        Manage Orders
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="ecommerce_orders_view.html" class="iconify">
+                                                        <i class="icon-tag"></i>
+                                                        Order View
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="ecommerce_products.html" class="iconify">
+                                                        <i class="icon-handbag"></i>
+                                                        Manage Products
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="ecommerce_products_edit.html" class="iconify">
+                                                        <i class="icon-pencil"></i>
+                                                        Product Edit
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <ul class="mega-menu-submenu">
+                                                <li>
+                                                    <h3>Autores</h3>
+                                                </li>
+                                                <li>
+                                                  @Html.ActionLink("Listar Autores", "Index", "Autor", new { area = "Admin" }, null)
+                                                </li>
+                                                <li>
+                                                    <a href="ecommerce_orders.html" class="iconify">
+                                                        <i class="icon-basket"></i>
+                                                        Manage Orders
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="ecommerce_orders_view.html" class="iconify">
+                                                        <i class="icon-tag"></i>
+                                                        Order View
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="ecommerce_products.html" class="iconify">
+                                                        <i class="icon-handbag"></i>
+                                                        Manage Products
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="ecommerce_products_edit.html" class="iconify">
+                                                        <i class="icon-pencil"></i>
+                                                        Product Edit
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="menu-dropdown">
+                        @Html.ActionLink("Notícias", "Index", "Noticias", new { area = "Admin" }, null)
+                        @*<a href="angularjs" class="tooltips" data-container="body" data-placement="bottom" data-html="true" data-original-title="Cadastro de Notícias">
+                            Notícias
+                        </a>*@
+                    </li>
+                </ul>
+            </div>
+            <!-- END MEGA MENU -->
+        </div>
+    </div>
+    <!-- END HEADER MENU -->
+</div>
+<!-- END HEADER -->

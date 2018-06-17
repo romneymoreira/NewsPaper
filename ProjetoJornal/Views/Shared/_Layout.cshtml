@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Primeira Hora</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <link rel="stylesheet" href="Assets/css/modernmag-assets.min.css">
+    <link rel="stylesheet" type="text/css" href="Assets/css/style.css">
+</head>
+<body>
+    <!-- Container -->
+    <div id="container">
+        <!-- Header
+            ================================================== -->
+        @Html.Partial("~/Views/Shared/_Header.cshtml")
+        <!-- End Header -->
+        <!-- content-section
+            ================================================== -->
+        <section id="content-section">
+            <div class="container">
+                @RenderBody()
+            </div>
+        </section>
+        <!-- End content section -->
+        <!-- footer
+            ================================================== -->
+        @Html.Partial("~/Views/Shared/_Footer.cshtml")
+        <!-- End footer -->
+    </div>
+    <!-- End Container -->
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/Assets/js")
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>

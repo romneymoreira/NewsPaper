@@ -1,0 +1,303 @@
+﻿
+@model  IEnumerable<ProjetoJornal.Areas.Admin.ViewModel.ListarCategoriasModel>
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-cogs font-green-sharp"></i>
+                    <span class="caption-subject font-green-sharp bold uppercase">Categorias do site</span>
+                </div>
+                <a class="btn default pull-right" onclick="Editar(0)" data-toggle="modal" href="#large">
+                    <i class="fa fa-edit"></i> Nova Categoria
+                </a>
+            </div>
+            <div class="portlet-body">
+                <div class="table-scrollable">
+                    <table class="table table-condensed table-hover">
+                        <thead>
+                            <tr>
+                                <th style="width:55%;">
+                                    Categoria
+                                </th>
+                                <th style="width:20%;">
+                                    Label
+                                </th>
+                                <th style="width:15%;">
+                                    Status
+                                </th>
+                                <th style="width:10%;">
+                                    #
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.Descricao
+                                    </td>
+                                    <td>
+                                        <a href="javascript:;" class="@item.Classe">
+                                            @item.Descricao
+                                        </a>
+                                    </td>
+                                    <td>
+                                        @Html.Raw(item.StatusLabel)
+                                    </td>
+                                    <td>
+                                        <a href="javascript:;" onclick="Editar(@item.IdCategoria)" class="btn btn-xs blue">
+                                            Editar <i class="fa fa-edit"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<div id="modalWrapper">
+    @* Inject form here *@
+</div>
+<!-- Modal -->
+<div class="modal fade bs-modal-lg" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Cadastro de categorias</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form role="form" id="formcategoria" novalidate="novalidate">
+                    <div class="col-md-12 alert alert-danger" style="display:none;" id="diverror">
+                        <button class="close" data-close="alert"></button>
+                        Existem campos obrigatórios sem preenchimento.
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group" id="divdescricao">
+                                <label class="control-label">
+                                    Descrição <span class="required">
+                                        *
+                                    </span>
+                                </label>
+                                <input type="text" class="form-control" id="descricao" maxlength="25" name="descricao" required>
+                                <input type="hidden" id="idCategoria" />
+                            </div>
+
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">
+                                    Classe <span class="required">
+                                        *
+                                    </span>
+                                </label>
+                                <div class="form-group form-md-radios">
+                                    <div class="md-radio-inline">
+                                        <div class="md-radio">
+                                            <input type="radio" id="radio1" value="1" name="classe" class="md-radiobtn" checked>
+                                            <label for="radio1">
+                                                <span></span>
+                                                <span class="check"></span>
+                                                <span class="box"></span>
+                                                <a href="javascript:;" class="category category-travel">
+                                                    1
+                                                </a>
+                                            </label>
+                                        </div>
+                                        <div class="md-radio">
+                                            <input type="radio" id="radio2" value="2" name="classe" class="md-radiobtn">
+                                            <label for="radio2">
+                                                <span></span>
+                                                <span class="check"></span>
+                                                <span class="box"></span>
+                                                <a href="javascript:;" class="category category-food">
+                                                    2
+                                                </a>
+                                            </label>
+                                        </div>
+                                        <div class="md-radio">
+                                            <input type="radio" id="radio3" value="3" name="classe" class="md-radiobtn">
+                                            <label for="radio3">
+                                                <span></span>
+                                                <span class="check"></span>
+                                                <span class="box"></span>
+                                                <a href="javascript:;" class="category category-world">
+                                                    3
+                                                </a>
+                                            </label>
+                                        </div>
+                                        <div class="md-radio">
+                                            <input type="radio" id="radio4" value="4" name="classe" class="md-radiobtn">
+                                            <label for="radio4">
+                                                <span></span>
+                                                <span class="check"></span>
+                                                <span class="box"></span>
+                                                <a href="javascript:;" class="category category-tech">
+                                                    4
+                                                </a>
+                                            </label>
+                                        </div>
+                                        <div class="md-radio">
+                                            <input type="radio" id="radio5" value="5" name="classe" class="md-radiobtn">
+                                            <label for="radio5">
+                                                <span></span>
+                                                <span class="check"></span>
+                                                <span class="box"></span>
+                                                <a href="javascript:;" class="category category-fashion">
+                                                    5
+                                                </a>
+                                            </label>
+                                        </div>
+                                        <div class="md-radio">
+                                            <input type="radio" id="radio6" value="6" name="classe" class="md-radiobtn">
+                                            <label for="radio6">
+                                                <span></span>
+                                                <span class="check"></span>
+                                                <span class="box"></span>
+                                                <a href="javascript:;" class="category category-video">
+                                                    6
+                                                </a>
+                                            </label>
+                                        </div>
+                                        <div class="md-radio">
+                                            <input type="radio" id="radio7" value="7" name="classe" class="md-radiobtn">
+                                            <label for="radio7">
+                                                <span></span>
+                                                <span class="check"></span>
+                                                <span class="box"></span>
+                                                <a href="javascript:;" class="category category-sport">
+                                                    7
+                                                </a>
+                                            </label>
+                                        </div>
+                                        <div class="md-radio">
+                                            <input type="radio" id="radio8" value="8" name="classe" class="md-radiobtn">
+                                            <label for="radio8">
+                                                <span></span>
+                                                <span class="check"></span>
+                                                <span class="box"></span>
+                                                <a href="javascript:;" class="category category-politics">
+                                                    8
+                                                </a>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group" id="divstatus">
+                                <label class="control-label">
+                                    Status <span class="required">
+                                        *
+                                    </span>
+                                </label>
+                                <select class="form-control" name="status" id="status" required>
+                                    <option value="">Selecione um status</option>
+                                    <option value="A">Ativo</option>
+                                    <option value="I">Inativo</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-save"></i> Fechar</button>
+                <button type="button" class="btn btn-primary" onclick="salvar();"><i class="fa fa-save"></i> Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
+@section Scripts {
+
+    <!-- BEGIN CORE PLUGINS -->
+    <script type="text/javascript">
+    $(document).ready(function () {
+    });
+
+    function salvar() {
+
+        if ($("#descricao").val() == '' || $("#status").val() == '') {
+            if ($("#descricao").val() == '')
+                $("#divdescricao").addClass('has-error');
+
+            if ($("#status").val() == '')
+                $("#divstatus").addClass('has-error');
+
+            $("#diverror").show();
+
+        } else {
+            $("#diverror").hide();
+            $("#divstatus").removeClass('has-error');
+            $("#divdescricao").removeClass('has-error');
+
+            var checado = 1;
+            $('input:radio[name=classe]').each(function () {
+                //Verifica qual está selecionado
+                if ($(this).is(':checked'))
+                    checado = parseInt($(this).val());
+            })
+            var model = {
+                IdCategoria: parseInt($("#idCategoria").val()),
+                Descricao: $("#descricao").val(),
+                Status: $("#status").val(),
+                StatusLabel: "",
+                StatusTexto: "",
+                IdClasse: checado,
+                Classe: "",
+            };
+            $.ajax({
+                type: 'post',
+                dataType: 'json',
+                cache: false,
+                url: "@Url.Action("Salvar", "Categoria")",
+                data: { model: model},
+                success: function (result) {
+                    toastr.success("Categoria cadastrada com sucesso", "Sucesso");
+                    var url = "@Url.Action("Index", "Categoria")";
+                    location.href = url;
+                },
+                error: function (xhr) {
+                    console.log(xhr.responseText);
+                    toastr.error(xhr.responseText, "Erro");
+                }
+            });
+        }
+    }
+
+    function Editar(id) {
+
+        $.ajax({
+            type: 'get',
+            dataType: 'json',
+            cache: false,
+            url: "@Url.Action("ModalEditar", "Categoria")",
+            data: {id: id},
+            success: function (result) {
+                $("#descricao").val(result.Descricao);
+                $("#idCategoria").val(result.IdCategoria);
+                $("#status").val(result.Status);
+                $("#classe").val(result.Classe);
+                $("#radio" + result.IdClasse).prop('checked', true);
+            },
+            error: function (xhr) {
+                console.log(xhr.responseText);
+                alert("Error has occurred..");
+            }
+        });
+        $('#exampleModal').modal('show');
+    }
+    </script>
+}

@@ -1,0 +1,200 @@
+﻿
+
+@model  IEnumerable<ProjetoJornal.Areas.Admin.ViewModel.ListarAutoresModel>
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-cogs font-green-sharp"></i>
+                    <span class="caption-subject font-green-sharp bold uppercase">Autores do site</span>
+                </div>
+                <a class="btn default pull-right" onclick="Editar(0)" data-toggle="modal" href="#large">
+                    <i class="fa fa-edit"></i> Novo Autor
+                </a>
+            </div>
+            <div class="portlet-body">
+                <div class="table-scrollable">
+                    <table class="table table-condensed table-hover">
+                        <thead>
+                            <tr>
+                                <th style="width:45%;">
+                                    Autor
+                                </th>
+                                <th style="width:30%;">
+                                    E-mail
+                                </th>
+                                <th style="width:15%;">
+                                    Celular
+                                </th>
+                                <th style="width:10%;">
+                                    #
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.Nome
+                                    </td>
+                                    <td>
+                                        @item.Email
+                                    </td>
+                                    <td>
+                                        @item.CelularFormatado
+                                    </td>
+                                    <td>
+                                        <a href="javascript:;" onclick="Editar(@item.IdAutor)" class="btn btn-xs blue">
+                                            Editar <i class="fa fa-edit"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<div id="modalWrapper">
+    @* Inject form here *@
+</div>
+<!-- Modal -->
+<div class="modal fade bs-modal-lg" id="autorModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Cadastro de autores</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form role="form" id="formcategoria" novalidate="novalidate">
+                    <div class="col-md-12 alert alert-danger" style="display:none;" id="diverror">
+                        <button class="close" data-close="alert"></button>
+                        Existem campos obrigatórios sem preenchimento.
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group" id="divnome">
+                                <label class="control-label">
+                                    Nome <span class="required">
+                                        *
+                                    </span>
+                                </label>
+                                <input type="text" class="form-control" id="nome" maxlength="100" name="nome" required>
+                                <input type="hidden" id="idAutor" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group" id="divemail">
+                                <label class="control-label">
+                                    E-mal <span class="required">
+                                        *
+                                    </span>
+                                </label>
+                                <input type="email" class="form-control" id="email" maxlength="100" name="email" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group" id="divcelular">
+                                <label class="control-label">
+                                    Celular <span class="required">
+                                        *
+                                    </span>
+                                </label>
+                                <input type="text" class="form-control" id="celular" maxlength="20" name="celular" required>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-save"></i> Fechar</button>
+                <button type="button" class="btn btn-primary" onclick="salvar();"><i class="fa fa-save"></i> Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
+@section Scripts {
+
+    <!-- BEGIN CORE PLUGINS -->
+    <script type="text/javascript">
+    $(document).ready(function () {
+    });
+
+    function salvar() {
+
+        if ($("#nome").val() == '' || $("#email").val() == '' || $("#celular").val() == '') {
+            if ($("#nome").val() == '')
+                $("#divnome").addClass('has-error');
+
+            if ($("#email").val() == '')
+                $("#divemail").addClass('has-error');
+
+            if ($("#celular").val() == '')
+                $("#divcelular").addClass('has-error');
+
+            $("#diverror").show();
+
+        } else {
+            $("#diverror").hide();
+            $("#divcelular").removeClass('has-error');
+            $("#divnome").removeClass('has-error');
+            $("#divemail").removeClass('has-error');
+
+            var model = {
+                IdAutor: parseInt($("#idAutor").val()),
+                Nome: $("#nome").val(),
+                Email: $("#email").val(),
+                Celular: $("#celular").val()
+            };
+            $.ajax({
+                type: 'post',
+                dataType: 'json',
+                cache: false,
+                url: "@Url.Action("Salvar", "Autor")",
+                data: { model: model},
+                success: function (result) {
+                    toastr.success("Autor cadastrado com sucesso", "Sucesso");
+                    var url = "@Url.Action("Index", "Autor")";
+                    location.href = url;
+                },
+                error: function (xhr) {
+                    console.log(xhr.responseText);
+                    toastr.error(xhr.responseText, "Erro");
+                }
+            });
+        }
+    }
+
+    function Editar(id) {
+
+        $.ajax({
+            type: 'get',
+            dataType: 'json',
+            cache: false,
+            url: "@Url.Action("ObterAutor", "Autor")",
+            data: {id: id},
+            success: function (result) {
+                $("#nome").val(result.Nome);
+                $("#idAutor").val(result.IdAutor);
+                $("#celular").val(result.Celular);
+                $("#email").val(result.Email);
+            },
+            error: function (xhr) {
+                console.log(xhr.responseText);
+                alert("Error has occurred..");
+            }
+        });
+        $('#autorModal').modal('show');
+    }
+    </script>
+}

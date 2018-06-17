@@ -1,0 +1,249 @@
+﻿
+@model ProjetoJornal.Areas.Admin.ViewModel.CadastrarNoticiaModel
+
+
+<!-- /.modal -->
+<div class="modal fade bs-modal-lg" id="large" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">Upload de imagens</h4>
+            </div>
+            <div class="modal-body">
+                <!-- BEGIN PAGE CONTENT-->
+                <div class="portlet light">
+                    <div class="portlet-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p>
+                                    <span class="label label-warning">
+                                        Atenção: 
+                                    </span>
+                                     Você pode enviar várias imagens ao mesmo tempo, basta selecionar mais de uma.
+                                </p>
+                                <form class="dropzone" action="@Url.Action("UploadHomeReport", "Noticias")" id="my-dropzone"></form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END PAGE CONTENT-->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn default" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<br />
+<div class="row">
+    <div class="col-md-12 ">
+        <!-- BEGIN SAMPLE FORM PORTLET-->
+        <div class="portlet light">
+            <div class="portlet-title">
+                <div class="caption font-green">
+                    <i class="icon-pin font-green"></i>
+                    <span class="caption-subject bold uppercase"> Cadastro de notícias</span>
+                </div>
+                <a class="btn default pull-right" data-toggle="modal" href="#large">
+                    <i class="fa fa-image"></i> Inserir Imagens
+                </a>
+            </div>
+            <div class="portlet-body form">
+                <form role="form" id="formnoticia" novalidate="novalidate">
+                    <div class="form-body">
+                        <div class="col-md-12 alert alert-danger display-hide">
+                            <button class="close" data-close="alert"></button>
+                            Existem campos obrigatórios sem preenchimento.
+                        </div>
+                        <div class="col-md-12" id="divImagens" style="display: none;">
+                            <div class="table-scrollable">
+                                <table class="table table-bordered table-hover" id="tableImagens">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 10%">
+                                                #
+                                            </th>
+                                            <th style="width: 70%">
+                                                URL
+                                            </th>
+                                            <th style="width: 10%">
+                                                Copiar
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">
+                                    Categoria <span class="required">
+                                        *
+                                    </span>
+                                </label>
+                                <select class="form-control" id="selCategoria" name="Model.IdCategoria" required>
+                                    <option value="">Selecione...</option>
+                                    @foreach (var item in Model.CategoriasListar)
+                                    {
+                                        <option value="@item.IdCategoria">@item.Nome</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">
+                                    Autor <span class="required">
+                                        *
+                                    </span>
+                                </label>
+                                <select class="form-control" name="Model.IdAutor" id="selAutor" required>
+                                    <option value="">Selecione...</option>
+                                    @foreach (var item in Model.AutoresListar)
+                                    {
+                                        <option value="@item.IdAutor">@item.Nome</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">
+                                    Status <span class="required">
+                                        *
+                                    </span>
+                                </label>
+                                @if (Model.Id > 0)
+                                {
+                                    <select class="form-control" name="Model.Status" id="selStatus" required>
+                                        <option value="A">Aguardando Publicação</option>
+                                        <option value="P">Publicado</option>
+                                    </select>
+                                }
+                                else
+                                {
+                                    <select class="form-control" disabled name="Model.Status" id="selStatus" required>
+                                        <option selected="selected" value="A">Aguardando Publicação</option>
+                                    </select>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group form-md-line-input">
+                                <div class="md-checkbox-list">
+                                    <div class="md-checkbox">
+                                        <input type="checkbox" id="checkboxVaiParaHome" checked="checked" name="Model.VaiParaHome" class="md-check">
+                                        <label for="checkboxVaiParaHome">
+                                            <span class="inc"></span>
+                                            <span class="check"></span>
+                                            <span class="box"></span>
+                                            Enviar para a Home
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">
+                                    Imagem da home <span class="required">
+                                        *
+                                    </span>
+                                </label>
+                                <input type="text" class="form-control" id="imagemhome" name="Model.FotoHome" required>
+                            </div>
+
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">
+                                    Titulo <span class="required">
+                                        *
+                                    </span>
+                                </label>
+                                <input type="text" class="form-control" id="titulo" name="Model.Titulo" value="@Model.Titulo" required>
+                            </div>
+
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <textarea rows="10" style="width: 100%" data-error-container="#editor2_error" cols="10" name="Model.Corpo" id="corpo" required>@Model.Corpo</textarea>
+                                <div id="editor2_error">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-actions">
+                        <div class="row pull-right">
+                            <button type="button" class="btn blue" onclick="salvar();"><i class="fa fa-save"></i> Salvar</button>
+                            <a href="@Url.Action("Index", "Noticias")" class="btn default"><i class="fa fa-backward"></i> Cancelar</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- END SAMPLE FORM PORTLET-->
+    </div>
+</div>
+
+@section Scripts {
+
+    <script type="text/javascript">
+        function salvar() {
+            var model = {
+                IdCategoria: parseInt($("#selCategoria").val()),
+                IdAutor: parseInt($("#selAutor").val()),
+                VaiParaHome: $("#checkboxVaiParaHome").val(),
+                Status: $("#selStatus").val(),
+                FotoHome: $("#imagemhome").val(),
+                Titulo: $("#titulo").val(),
+                Corpo: $('#corpo').code(),
+            };
+            $.ajax({
+                type: 'post',
+                //dataType: 'json',
+                cache: false,
+                url: "@Url.Action("SalvarNoticia", "Noticias")",
+                data: { model: model},
+                success: function (result) {
+                    toastr.success("Noticia cadastrada com sucesso", "Sucesso");
+                    var url = "@Url.Action("Index", "Noticias")";
+                    location.href = url;
+                },
+                error: function (xhr) {
+                    console.log(xhr.responseText);
+                    toastr.error(xhr.responseText, "Erro");
+                }
+            });
+        }
+
+
+
+        function voltar() {
+              var url = "@Url.Action("Index", "Noticias")";
+                    location.href = url;
+        }
+        function copyToClipboard(element) {
+            $("#imagemhome").val($(element).text());
+        }
+
+        $(document).ready(function () {
+            FormDropzone.init();
+            FormValidation.init();
+        $('#corpo').summernote({
+            height: 500, // set editor height
+            minHeight: null, // set minimum height of editor
+            maxHeight: null, // set maximum height of editor
+            focus: true, // set focus to editable area after initializing summernote
+        });
+        $("#selCategoria").val('@Model.IdCategoria');
+        $("#selAutor").val('@Model.IdAutor');
+    });
+    </script>
+}
