@@ -154,7 +154,7 @@
                     <a class="btn btn-outline btn-success dim" href="@Url.Action("Cadastrar", "Noticias")?idNoticia=@item.Id"><i class="fa fa-upload"></i> Editar notícia</a>
                     @if (item.Status == "A")
                     {
-                        <a class="btn btn-outline btn-info dim" href="@Url.Action("Publicar", "Noticias")?idNoticia=@item.Id"><i class="fa fa-globe"></i> Publicar notícia</a>
+                        <a class="btn btn-outline btn-info dim" href="http://localhost:57914/Home/Publicar?id=@item.Id" target="_blank"><i class="fa fa-globe"></i> Publicar notícia</a>
                     }
                 </div>
             }
@@ -183,6 +183,7 @@
             popularCategorias();
         });
 
+       
         function popularAutores() {
             $.ajax({
                 url: "@Url.Action("Autores", "Noticias")",

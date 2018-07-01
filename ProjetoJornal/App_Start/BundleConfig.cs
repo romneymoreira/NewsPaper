@@ -64,9 +64,9 @@ namespace ProjetoJornal
                "~/Areas/Admin/Assets/global/plugins/jquery-file-upload/blueimp-gallery/blueimp-gallery.min.css",
                "~/Areas/Admin/Assets/global/plugins/dropzone/css/dropzone.css",
                "~/Areas/Admin/Assets/global/global/plugins/bootstrap-toastr/toastr.min.css",
-              "~/Areas/Admin/Assets/admin/pages/css/tasks.css"
+              "~/Areas/Admin/Assets/admin/pages/css/tasks.css",
+               "~/Areas/Admin/Assets/global/plugins/icheck/skins/all.css"
               ));
-
 
             bundles.Add(new ScriptBundle("~/Areas/Admin/Assets/global/plugins/jquery.min").Include(
             "~/Areas/Admin/Assets/global/plugins/jquery.min.js"
@@ -107,6 +107,7 @@ namespace ProjetoJornal
                 "~/Areas/Admin/Assets/admin/pages/scripts/form-dropzone.js",
                 "~/Areas/Admin/Assets/admin/pages/scripts/form-validation.js",
                 "~/Areas/Admin/Assets/admin/pages/scripts/components-editors.js",
+                "~/Areas/Admin/Assets/global/plugins/icheck/icheck.min.js",
                 "~/Areas/Admin/Assets/global/scripts/datatable.js"));
 
         }

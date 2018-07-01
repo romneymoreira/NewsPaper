@@ -222,6 +222,53 @@ namespace ProjetoJornal.Controllers
             }
         }
 
+        public ActionResult Publicar(int id)
+        {
+            try
+            {
+                var model = new NoticiaSiteModel();
+                var noticia = _repository.ObterNoticiaPorId(id);
+                if (noticia == null)
+                    throw new HttpException(404, "Not Found");
+
+                model.Id = noticia.Id;
+                model.IdAutor = noticia.IdAutor;
+                model.IdCategoria = noticia.IdCategoria;
+                model.Status = noticia.Status;
+                model.Titulo = noticia.Titulo;
+                model.FotoHome = noticia.FotoHome;
+                model.Corpo = noticia.Corpo;
+                model.Autor = noticia.Autor?.Nome;
+                model.Categoria = noticia.Categoria?.Descricao;
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                throw new HttpException(500, ex.Message);
+            }
+        }
+
+        public JsonResult AutorizarPublicacao(int id)
+        {
+            try
+            {
+                var model = new NoticiaSiteModel();
+                var noticia = _repository.ObterNoticiaPorId(id);
+                if (noticia == null)
+                    throw new HttpException(404, "Not Found");
+
+                noticia.Status = "P";
+                _repository.SalvarNoticia(noticia);
+
+                return Json("S", JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                throw new HttpException(500, ex.Message);
+            }
+        }
+
         public Int64 AdicionaClick(int idVisualizacao)
         {
             Int64 result = 0;

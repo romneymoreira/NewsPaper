@@ -195,6 +195,7 @@
     <Compile Include="Areas\Admin\ViewModel\JsonResultModel.cs" />
     <Compile Include="Areas\Admin\ViewModel\ListarAutoresModel.cs" />
     <Compile Include="Areas\Admin\ViewModel\ListarCategoriasModel.cs" />
+    <Compile Include="Areas\Admin\ViewModel\ListarImagens.cs" />
     <Compile Include="Areas\Admin\ViewModel\ListarNoticiasModel.cs" />
     <Compile Include="Areas\Admin\ViewModel\NoticiaModel.cs" />
     <Compile Include="Areas\Admin\ViewModel\ResultModel.cs" />
@@ -4532,6 +4533,7 @@
     <Content Include="Areas\Admin\Assets\global\plugins\zoom\jquery.zoom.min.js" />
     <Content Include="Areas\Admin\Assets\global\scripts\datatable.js" />
     <Content Include="Areas\Admin\Assets\global\scripts\metronic.js" />
+    <Content Include="Areas\Admin\Assets\js\common.js" />
     <Content Include="Assets\css\closedhand.cur" />
     <Content Include="Assets\css\fonts\ElegantIcons.svg" />
     <Content Include="Assets\css\fonts\fontawesome-webfont.svg" />
@@ -5026,6 +5028,7 @@
     <Content Include="Views\Home\Busca.cshtml" />
     <Content Include="Views\Shared\_Menu.cshtml" />
     <Content Include="Views\Shared\_UltimasHoje.cshtml" />
+    <Content Include="Views\Home\Publicar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

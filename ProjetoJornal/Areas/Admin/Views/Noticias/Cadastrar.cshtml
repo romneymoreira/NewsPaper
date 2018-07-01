@@ -2,6 +2,43 @@
 @model ProjetoJornal.Areas.Admin.ViewModel.CadastrarNoticiaModel
 
 
+
+<!-- /.modal -->
+<div class="modal fade bs-modal-lg" id="modalfotos" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">Seleconar imagens</h4>
+            </div>
+            <div class="modal-body">
+                <!-- BEGIN PAGE CONTENT-->
+                <div class="portlet light">
+                    <div class="portlet-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Diretório de fotos</label>
+                                    <select class="form-control" id="selDiretorios" placeholder="Selecione uma pasta" name="selDiretorios"></select>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div id="selecaodeimagens">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+            <div class="modal-footer">
+                <button type="button" class="btn default" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
 <!-- /.modal -->
 <div class="modal fade bs-modal-lg" id="large" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -18,9 +55,9 @@
                             <div class="col-md-12">
                                 <p>
                                     <span class="label label-warning">
-                                        Atenção: 
+                                        Atenção:
                                     </span>
-                                     Você pode enviar várias imagens ao mesmo tempo, basta selecionar mais de uma.
+                                    Você pode enviar várias imagens ao mesmo tempo, basta selecionar mais de uma.
                                 </p>
                                 <form class="dropzone" action="@Url.Action("UploadHomeReport", "Noticias")" id="my-dropzone"></form>
                             </div>
@@ -55,39 +92,18 @@
             <div class="portlet-body form">
                 <form role="form" id="formnoticia" novalidate="novalidate">
                     <div class="form-body">
-                        <div class="col-md-12 alert alert-danger display-hide">
-                            <button class="close" data-close="alert"></button>
+                        <div class="col-md-12 alert alert-danger" id="divErros" style="display:none;">
                             Existem campos obrigatórios sem preenchimento.
                         </div>
-                        <div class="col-md-12" id="divImagens" style="display: none;">
-                            <div class="table-scrollable">
-                                <table class="table table-bordered table-hover" id="tableImagens">
-                                    <thead>
-                                        <tr>
-                                            <th style="width: 10%">
-                                                #
-                                            </th>
-                                            <th style="width: 70%">
-                                                URL
-                                            </th>
-                                            <th style="width: 10%">
-                                                Copiar
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
-                            </div>
-                        </div>
                         <div class="col-md-6">
-                            <div class="form-group">
+                            <div class="form-group" id="divCategoria">
                                 <label class="control-label">
                                     Categoria <span class="required">
                                         *
                                     </span>
                                 </label>
                                 <select class="form-control" id="selCategoria" name="Model.IdCategoria" required>
-                                    <option value="">Selecione...</option>
+                                    <option value="" selected="selected">Selecione...</option>
                                     @foreach (var item in Model.CategoriasListar)
                                     {
                                         <option value="@item.IdCategoria">@item.Nome</option>
@@ -96,14 +112,14 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-group">
+                            <div class="form-group" id="divAutor">
                                 <label class="control-label">
                                     Autor <span class="required">
                                         *
                                     </span>
                                 </label>
                                 <select class="form-control" name="Model.IdAutor" id="selAutor" required>
-                                    <option value="">Selecione...</option>
+                                    <option value="" selected="selected">Selecione...</option>
                                     @foreach (var item in Model.AutoresListar)
                                     {
                                         <option value="@item.IdAutor">@item.Nome</option>
@@ -136,8 +152,9 @@
                         <div class="col-md-6">
                             <div class="form-group form-md-line-input">
                                 <div class="md-checkbox-list">
+                                    <input type="hidden" name="Model.VaiParaHome" id="vaiparahome" />
                                     <div class="md-checkbox">
-                                        <input type="checkbox" id="checkboxVaiParaHome" checked="checked" name="Model.VaiParaHome" class="md-check">
+                                        <input type="checkbox" id="checkboxVaiParaHome" onclick="clickEnviaHome()" name="checkboxVaiParaHome" class="md-check">
                                         <label for="checkboxVaiParaHome">
                                             <span class="inc"></span>
                                             <span class="check"></span>
@@ -149,18 +166,24 @@
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <div class="form-group">
+                            <div class="form-group" id="divImagem">
                                 <label class="control-label">
                                     Imagem da home <span class="required">
                                         *
                                     </span>
                                 </label>
-                                <input type="text" class="form-control" id="imagemhome" name="Model.FotoHome" required>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="imagemhome" placeholder="Imagem" name="Model.FotoHome" value="@Model.FotoHome" required>
+                                    <span class="input-group-addon" onclick="abrirModal();">
+                                        <i class="fa fa-cloud-upload"></i>
+                                    </span>
+                                </div>
+
                             </div>
 
                         </div>
                         <div class="col-md-12">
-                            <div class="form-group">
+                            <div class="form-group" id="divTitulo">
                                 <label class="control-label">
                                     Titulo <span class="required">
                                         *
@@ -191,15 +214,71 @@
         <!-- END SAMPLE FORM PORTLET-->
     </div>
 </div>
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="modal_confirmacao">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Deseja cadastrar uma nova notícia?</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="botao_sim">Sim</button>
+                <button type="button" class="btn btn-primary" id="botao_nao">Não</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
 
     <script type="text/javascript">
+
         function salvar() {
+            //valida itens preenchidos
+            if ($("#selCategoria").val() === '') {
+                $("#divErros").show();
+                $("#divCategoria").addClass('has-error');
+                toastr.error("Você deve selecionar uma categoria!", "Erro");
+                return;
+            } else { $("#divCategoria").removeClass('has-error'); }
+
+            if ($("#selAutor").val() === '') {
+                $("#divErros").show();
+                $("#divAutor").addClass('has-error');
+                toastr.error("Você deve selecionar um autor", "Erro");
+                return;
+            } else { $("#divAutor").removeClass('has-error'); }
+
+            if ($("#titulo").val() === '') {
+                $("#divTitulo").addClass('has-error');
+                $("#divErros").show();
+                toastr.error("Você deve preencher o campo titulo!", "Erro");
+                return;
+            } else { $("#divTitulo").removeClass('has-error'); }
+
+            if ($('#corpo').code() === '<p><br></p>') {
+                $("#divErros").show();
+                $(".note-editor").css('border-color', 'red');
+                toastr.error("Você deve preencher o corpo da notícia!", "Erro");
+                return;
+            } else { $(".note-editor").css('border-color', '');}
+
+            if ($("#vaiparahome").val() === 'S'){
+                if ($("#imagemhome").val() === '') {
+                    $("#divImagem").addClass('has-error');
+                    $("#divErros").show();
+                    toastr.error("Se você selecionar a notícia para ir para 'HOME', você deve incluir uma imagem!", "Erro");
+                    return;
+                } else { $("#divImagem").removeClass('has-error'); }
+            }
+            //oculta a div erros
+            $("#divErros").hide();
+
             var model = {
                 IdCategoria: parseInt($("#selCategoria").val()),
                 IdAutor: parseInt($("#selAutor").val()),
-                VaiParaHome: $("#checkboxVaiParaHome").val(),
+                VaiParaHome: $("#vaiparahome").val(),
                 Status: $("#selStatus").val(),
                 FotoHome: $("#imagemhome").val(),
                 Titulo: $("#titulo").val(),
@@ -212,9 +291,7 @@
                 url: "@Url.Action("SalvarNoticia", "Noticias")",
                 data: { model: model},
                 success: function (result) {
-                    toastr.success("Noticia cadastrada com sucesso", "Sucesso");
-                    var url = "@Url.Action("Index", "Noticias")";
-                    location.href = url;
+                    $("#modal_confirmacao").modal("show");
                 },
                 error: function (xhr) {
                     console.log(xhr.responseText);
@@ -223,27 +300,119 @@
             });
         }
 
-
-
         function voltar() {
-              var url = "@Url.Action("Index", "Noticias")";
-                    location.href = url;
+            var url = "@Url.Action("Index", "Noticias")";
+            location.href = url;
         }
         function copyToClipboard(element) {
             $("#imagemhome").val($(element).text());
         }
 
+        function clickEnviaHome() {
+            console.log($("#checkboxVaiParaHome").is(':checked'));
+            if ($("#checkboxVaiParaHome").is(':checked')) {
+                $("#vaiparahome").val("S");
+            } else { $("#vaiparahome").val("N"); }
+        }
+
         $(document).ready(function () {
-            FormDropzone.init();
-            FormValidation.init();
-        $('#corpo').summernote({
-            height: 500, // set editor height
-            minHeight: null, // set minimum height of editor
-            maxHeight: null, // set maximum height of editor
-            focus: true, // set focus to editable area after initializing summernote
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "positionClass": "toast-top-full-width",
+                "onclick": null,
+                "showDuration": "1000",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+
+
+         $("#botao_sim").on("click", function () {
+            toastr.success("Noticia cadastrada com sucesso", "Sucesso");
+            $("#modal_confirmacao").modal('hide');
+            window.setTimeout(function () {
+                var url = "@Url.Action("Cadastrar", "Noticias")?idNoticia=0";
+                location.href = url;
+            }, 1000);
+
         });
-        $("#selCategoria").val('@Model.IdCategoria');
-        $("#selAutor").val('@Model.IdAutor');
-    });
+
+        $("#botao_nao").on("click", function () {
+            toastr.success("Noticia cadastrada com sucesso", "Sucesso");
+            $("#modal_confirmacao").modal('hide');
+            window.setTimeout(function () {
+                var url = "@Url.Action("Index", "Noticias")";
+             location.href = url;
+            }, 1000);
+        });
+
+        $("#selDiretorios").change(function () {
+            $.ajax({
+                url: "@Url.Action("ListarArquivos", "Noticias")",
+                data: { diretorio: $("#selDiretorios").val() },
+                success: function (data) {
+                    $("#selecaodeimagens").empty();
+                    $.each(data, function (index, element) {
+                        $("#selecaodeimagens").append('<div class="col-md-2" style="margin-bottom: 10px;"><input type="radio" onclick="selecionar(' + element.Id + ')" value="' + element.Id + '" name="radioSelecao" class="icheck"> </label><img alt="' + element.Nome + '" id="img_' + element.Id +'" src="' + element.Url + '"> </div>');
+                    });
+                }
+            });
+        });
+
+            FormDropzone.init();
+            //FormValidation.init();
+            $('#corpo').summernote({
+                height: 500, // set editor height
+                minHeight: null, // set minimum height of editor
+                maxHeight: null, // set maximum height of editor
+                focus: true, // set focus to editable area after initializing summernote
+            });
+
+            if (@Model.Id > 0) {
+                 $("#selCategoria").val('@Model.IdCategoria');
+                $("#selAutor").val('@Model.IdAutor');
+                if ('@Model.VaiParaHome' == 'S')
+                    $("#checkboxVaiParaHome").attr('checked', true);
+                else
+                    $("#checkboxVaiParaHome").attr('checked', false);
+
+                $("#vaiparahome").val("@Model.VaiParaHome");
+            } else {
+                $("#checkboxVaiParaHome").attr('checked', true);
+                $("#vaiparahome").val("S");
+            }
+        });
+
+        function selecionar(id) {
+            var imgsrc = $("#img_" + id).attr('src');
+            var imagem = "";
+            if (imgsrc != undefined) {
+                imagem = imgsrc.replace("_80x80","_800x400")
+            }
+            $("#imagemhome").val(imagem);
+        }
+
+        function abrirModal() {
+            popularDiretorios();
+            $("#modalfotos").modal('show');
+        }
+
+         function popularDiretorios() {
+             $.ajax({
+                url: "@Url.Action("ListarDiretorios", "Noticias")",
+                success: function (data) {
+                    $("#selDiretorios").empty();
+                    $("#selDiretorios").append('<option value="0">Selecione um diretório...</option>');
+                    $.each(data, function (index, element) {
+                        $("#selDiretorios").append('<option value="' + element + '">' + element + '</option>');
+                    });
+                }
+            });
+        }
     </script>
 }

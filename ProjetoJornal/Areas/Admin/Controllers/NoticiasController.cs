@@ -103,8 +103,10 @@ namespace ProjetoJornal.Areas.Admin.Controllers
         [HttpPost]
         public async Task<ActionResult> UploadHomeReport(string id)
         {
-            string table = "";
-            int idResult = 0;
+            DateTime data = DateTime.Now;
+            string subdiretorio = data.Year.ToString() + "-" + data.Month.ToString() + "-" + data.Day.ToString();
+            string caminhocompleto = Server.MapPath("~/Areas/Admin/Upload/") + subdiretorio;
+            int posicao = 1;
             try
             {
                 foreach (string item in Request.Files)
@@ -119,9 +121,14 @@ namespace ProjetoJornal.Areas.Admin.Controllers
                         //Pega a extensão do arquivo
                         string extensao = Path.GetExtension(file.FileName);
                         //Gera nome novo do Arquivo numericamente
-                        string filename = string.Format("{0:00000000000000}", GerarID());
+                        string filename = posicao.ToString() + "_" + GerarID().ToString();
+                        posicao++;
+                        //sempre crio um subdiretorio dento da pasta raiz 
+                        if (!Directory.Exists(caminhocompleto))
+                            Directory.CreateDirectory(caminhocompleto);
+
                         //Caminho a onde será salvo
-                        file.SaveAs(Server.MapPath("~/Areas/Admin/Upload/") + filename + extensao);
+                        file.SaveAs(caminhocompleto + "/" + filename + extensao);
 
                         //Prefixo P/ img pequena
                         var prefixoP = "_80x80";
@@ -131,28 +138,21 @@ namespace ProjetoJornal.Areas.Admin.Controllers
                         var prefixoG = "_800x400";
 
                         //pega o arquivo já carregado
-                        string pth = Server.MapPath("~/Areas/Admin/Upload/") + filename + extensao;
+                        string pth = caminhocompleto + "/" + filename + extensao;
 
                         string arquivo = Constantes.UrlImagens + filename + prefixoG + extensao;
                         string imagem1 = Redefinir.resizeImageAndSave(pth, Constantes.ImagemW80, Constantes.ImagemH80, prefixoP);
                         string imagem2 = Redefinir.resizeImageAndSave(pth, Constantes.ImagemW400, Constantes.ImagemH250, prefixoM);
                         string imagem3 = Redefinir.resizeImageAndSave(pth, Constantes.ImagemW800, Constantes.ImagemH400, prefixoG);
-
-                        idResult++;// = RetornaId(idResult);
-                        table += "<tr><td>" + idResult.ToString() + "</td><td><span id='p_" + idResult + "'>" + arquivo + "</span></td><td><a href='javascript:;' onclick='copyToClipboard(\"#p_" + idResult + "\")' class='btn btn-icon-only grey-cascade'><i class='fa fa-link'></i></a><a href='" + arquivo + "' target='_blank' class='btn btn-icon-only green'><i class='fa fa-file-image-o'></i></a></td></tr>";
-                        //idResult++;
-                        //table += "<tr><td>" + idResult.ToString() + "</td><td><span id='p_" + idResult + "'>" + imagem2 + "</span></td><td>400x250</td><td><a href='javascript:;' onclick='copyToClipboard(\"#p_" + idResult + "\")' class='btn btn-icon-only grey-cascade'><i class='fa fa-link'></i></a></td></tr>";
-                        //idResult++;
-                        //table += "<tr><td>" + idResult.ToString() + "</td><td><span id='p_" + idResult + "'>" + imagem3 + "</span></td><td>800x400</td><td><a href='javascript:;' onclick='copyToClipboard(\"#p_" + idResult + "\")' class='btn btn-icon-only grey-cascade'><i class='fa fa-link'></i></a></td></tr>";
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return Json("Upload failed");
+                return Json(ex.Message);
             }
-            return Content(table);
+            return Json("sucesso");
         }
 
         [HttpPost]
@@ -171,8 +171,17 @@ namespace ProjetoJornal.Areas.Admin.Controllers
                     string extensao = Path.GetExtension(file.FileName);
                     //Gera nome novo do Arquivo numericamente
                     string filename = string.Format("{0:00000000000000}", GerarID());
+
+                    DateTime data = DateTime.Now;
+                    string subdiretorio = data.Year.ToString() + "-" + data.Month.ToString() + "-" + data.Day.ToString();
+                    string caminhocompleto = Server.MapPath("~/uploads/fotos/") + subdiretorio;
+                    //sempre crio um subdiretorio dento da pasta raiz 
+                    if (!Directory.Exists(caminhocompleto))
+                        Directory.CreateDirectory(caminhocompleto);
+
+
                     //Caminho a onde será salvo
-                    file.SaveAs(Server.MapPath("~/uploads/fotos/") + filename + extensao);
+                    file.SaveAs(caminhocompleto + "/" + filename + extensao);
 
                     //Prefixo p/ img pequena
                     var prefixoP = "-p";
@@ -180,7 +189,7 @@ namespace ProjetoJornal.Areas.Admin.Controllers
                     var prefixoG = "-g";
 
                     //pega o arquivo já carregado
-                    string pth = Server.MapPath("~/uploads/fotos/") + filename + extensao;
+                    string pth = caminhocompleto + "/" + filename + extensao;
 
                     //Redefine altura e largura da imagem e Salva o arquivo + prefixo
                     Redefinir.resizeImageAndSave(pth, 70, 53, prefixoP);
@@ -191,14 +200,48 @@ namespace ProjetoJornal.Areas.Admin.Controllers
             return View();
         }
 
-        public Int64 GerarID()
+        public JsonResult ListarDiretorios()
+        {
+            var lista = new List<string>();
+            string[] diretorios = Directory.GetDirectories(Server.MapPath("~/Areas/Admin/Upload/"));
+            foreach (string dir in diretorios)
+            {
+                var info = new DirectoryInfo(dir);
+                var dirName = info.Name;
+                lista.Add(dirName);
+            }
+            return Json(lista, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult ListarArquivos(string diretorio)
+        {
+            var lista = new List<ListarImagens>();
+            string raiz = Server.MapPath("~/Areas/Admin/Upload/") + diretorio;
+            string[] arquivos = Directory.GetFiles(raiz);
+            int id = 1;
+            foreach (string arq in arquivos)
+            {
+                string result = Path.GetFileName(arq);
+                if (result.Contains("80x80"))
+                {
+                    lista.Add(new ListarImagens()
+                    {
+                        Url = Constantes.UrlProjeto + "/Areas/Admin/Upload/" + diretorio + "/" + result,
+                        Nome = result,
+                        Id = id
+                    });
+                    id++;
+                }
+            }
+            return Json(lista, JsonRequestBehavior.AllowGet);
+        }
+
+        public Guid GerarID()
         {
             try
             {
-                DateTime data = new DateTime();
-                data = DateTime.Now;
-                string s = data.ToString().Replace("/", "").Replace(":", "").Replace(" ", "");
-                return Convert.ToInt64(s);
+                // Create and display the value of two GUIDs.
+                return Guid.NewGuid();
             }
             catch (Exception ex)
             {
@@ -220,7 +263,7 @@ namespace ProjetoJornal.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult SalvarNoticia(CadastrarNoticiaModel model)
+        public JsonResult SalvarNoticia(CadastrarNoticiaModel model)
         {
             if (model.Id > 0)
             {
@@ -236,12 +279,15 @@ namespace ProjetoJornal.Areas.Admin.Controllers
                 if (autor == null)
                     throw new Exception("Autor não encontrado.");
 
+                if (string.IsNullOrEmpty(model.Titulo))
+                    throw new Exception("O campo notícia deve ser preenchido.");
 
-                string home = model.VaiParaHome ? "S" : "N";
+                if (string.IsNullOrEmpty(model.Corpo))
+                    throw new Exception("O campo corpo deve ser preenchido.");
 
                 noticia.Corpo = model.Corpo;
                 noticia.Categoria = categoria;
-                noticia.VaiParaHome = home;
+                noticia.VaiParaHome = model.VaiParaHome;
                 noticia.Status = model.Status;
                 noticia.Autor = autor;
                 noticia.Titulo = model.Titulo;
@@ -258,9 +304,7 @@ namespace ProjetoJornal.Areas.Admin.Controllers
                 if (autor == null)
                     throw new Exception("Autor não encontrado.");
 
-                string home = model.VaiParaHome ? "S" : "N";
-
-                var noticia = new Noticia(model.Titulo, model.Corpo, home, categoria, autor);
+                var noticia = new Noticia(model.Titulo, model.Corpo, model.VaiParaHome, categoria, autor);
                 noticia.FotoHome = model.FotoHome;
                 var result = _repository.SalvarNoticia(noticia);
                 model.Id = result.Id;
@@ -271,7 +315,7 @@ namespace ProjetoJornal.Areas.Admin.Controllers
                 AutoresListar = ListarAutores(),
                 CategoriasListar = ListarCategorias()
             };
-            return View("~/Areas/Admin/Views/Noticias/Cadastrar.cshtml", retorno);
+            return Json(model, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Cadastrar(int idNoticia)
@@ -294,6 +338,7 @@ namespace ProjetoJornal.Areas.Admin.Controllers
                 model.IdAutor = noticia.IdAutor;
                 model.IdCategoria = noticia.IdCategoria;
                 model.Titulo = noticia.Titulo;
+                model.VaiParaHome = noticia.VaiParaHome;
             }
             return View(model);
         }

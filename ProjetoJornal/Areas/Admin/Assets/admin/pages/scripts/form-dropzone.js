@@ -30,10 +30,10 @@ var FormDropzone = function () {
                         file.previewElement.appendChild(removeButton);
                     });
                     this.on("complete", function (data) {
-                        if (data.xhr.status == 200) {
-                            $('#divImagens').show();
+                        if (data.xhr.status === 200) {
+                            //$('#divImagens').show();
                             var result = data.xhr.response;
-                            $('#tableImagens').append(result);
+                            //$('#tableImagens').append(result);
                         }
                         else {
                             //erro

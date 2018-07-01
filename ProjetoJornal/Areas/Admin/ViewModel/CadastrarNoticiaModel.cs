@@ -18,7 +18,7 @@ namespace ProjetoJornal.Areas.Admin.ViewModel
         public string CorpoSubString { get; set; }
         public DateTime Data { get; set; }
         public string Status { get; set; }
-        public bool VaiParaHome { get; set; }
+        public string VaiParaHome { get; set; }
         public string FotoHome { get; set; }
         public CadastrarNoticiaModel()
         {
