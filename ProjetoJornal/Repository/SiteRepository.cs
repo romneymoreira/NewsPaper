@@ -33,49 +33,71 @@ namespace ProjetoJornal.Repository
 
         public List<Noticia> ListarNoticiasHome()
         {
-            return Context.Noticia.ToList();
+            return Context.Noticia.Where(x => x.Status == "P").ToList();
         }
         public List<Noticia> ListarNoticiasMaisVisualizadas()
         {
-            return Context.Noticia.Include(x => x.Visualizacoes).OrderByDescending(x => x.Visualizacoes.Quantidade).Take(6).ToList();
+            return Context.Noticia.Include(x => x.Visualizacoes).Where(x => x.Status == "P").OrderByDescending(x => x.Visualizacoes.Quantidade).Take(6).ToList();
         }
         public List<UltimasHojeModel> ListarNoticiasHoje()
         {
             var data = DateTime.Now;
-            string sql = "select Titulo as \"Titulo\", Id as \"IdNoticia\" from noticia where Data >= DATE_FORMAT(STR_TO_DATE(@p0, '%d/%m/%Y'), '%Y-%m-%d')";
-            return Context.Database.SqlQuery<UltimasHojeModel>(sql, data.ToShortDateString()).ToList();
+            var data2 = DateTime.Now.AddDays(-7);
+            string sql = "select Titulo as \"Titulo\", Id as \"IdNoticia\" from noticia where Status = 'P' and Data >= DATE_FORMAT(STR_TO_DATE(@p0, '%d/%m/%Y'), '%Y-%m-%d') and Data < DATE_FORMAT(STR_TO_DATE(@p1, '%d/%m/%Y'), '%Y-%m-%d')";
+            return Context.Database.SqlQuery<UltimasHojeModel>(sql, data2.ToShortDateString(), data.ToShortDateString()).ToList();
         }
         public List<Noticia> ListarNoticiasTake(int take)
         {
-            return Context.Noticia.OrderByDescending(x => x.Data).Take(take).ToList();
+            return Context.Noticia.Where(x => x.Status == "P").OrderByDescending(x => x.Data).Take(take).ToList();
         }
-       
+
         public List<Noticia> ListarNoticiasBuscaAvancadaSite(string search)
         {
             return Context.Noticia
                 .Include(x => x.Visualizacoes)
                 .Include(x => x.Autor)
                 .Include(x => x.Categoria)
-                .Where(x => x.Titulo.ToLower().Contains(search.ToLower()) || x.Corpo.ToLower().Contains(search.ToLower()))
+                .Where(x => x.Status == "P" && x.Titulo.ToLower().Contains(search.ToLower()) || x.Corpo.ToLower().Contains(search.ToLower()))
                 .OrderByDescending(x => x.Data).ToList();
         }
-        public List<Noticia> ListarNoticiasBuscaAvancada(BuscaModel search)
+        public List<ListarNoticiasModel> ListarNoticiasBuscaAvancada(BuscaModel search)
         {
-            var result = Context.Noticia.OrderByDescending(x => x.Data).Take(50);
+            string sql = "select " +
+                           " fn_RemoveHTMLTag(N.Corpo) as Corpo, " +
+                           " SUBSTRING(fn_RemoveHTMLTag(N.Corpo), 1, 200) as CorpoSubString, " +
+                           " DATE_FORMAT(N.`Data`, '%d/%m/%Y') as Data, " +
+                           " N.FotoHome as FotoHome, " +
+                           " N.Id as Id,  " +
+                           " N.IdAutor as IdAutor, " +
+                           " N.IdCategoria as IdCategoria, " +
+                           " N.`Status` as Status,  " +
+                           " N.Titulo as Titulo, " +
+                           " C.Descricao as Categoria,  " +
+                           " N.VaiParaHome as VaiParaHome,  " +
+                           " A.Nome as Autor " +
+                           " from noticia N, categoria C, autor A " +
+                           " where N.IdCategoria = C.Id " +
+                           " and N.IdAutor = A.Id ";
 
             if (search.IdAutor > 0)
-                result.Where(x => x.IdAutor == search.IdAutor);
+                sql += " and N.IdAutor = " + search.IdAutor;
 
             if (search.IdCategoria > 0)
-                result.Where(x => x.IdCategoria == search.IdCategoria);
+                sql += " and N.IdCategoria = " + search.IdCategoria;
 
             if (!string.IsNullOrEmpty(search.Titulo))
-                result.Where(x => x.Titulo.ToLower().Contains(search.Titulo.ToLower()));
+                sql += " and LOWER(N.Titulo) like ('%" + search.Titulo.ToLower() + "%')";
 
             if (search.DataFinal != null && search.DataInicial != null)
-                result.Where(x => x.Data.Date >= search.DataInicial.Date && x.Data.Date <= search.DataFinal.Date);
+                if (search.DataFinal != DateTime.MinValue && search.DataInicial != DateTime.MinValue)
+                {
+                    sql += " and Data >= DATE_FORMAT(STR_TO_DATE('" + search.DataInicial.ToShortDateString() + "', '%d/%m/%Y'), '%Y-%m-%d') ";
+                    sql += " and Data <= DATE_FORMAT(STR_TO_DATE('" + search.DataFinal.ToShortDateString() + "', '%d/%m/%Y'), '%Y-%m-%d') ";
+                }
 
-            return result.ToList();
+            sql += " order by N.`Data` desc";
+
+            return Context.Database.SqlQuery<ListarNoticiasModel>(sql).ToList();
         }
         public Noticia ObterNoticiaPorId(int idNoticia)
         {
@@ -117,12 +139,24 @@ namespace ProjetoJornal.Repository
 
         public List<Noticia> ListarUltimasNoticias()
         {
-            return Context.Noticia.Include(a => a.Visualizacoes).Include(a => a.Categoria).OrderByDescending(x => x.Data).Take(6).ToList();
+            return Context.Noticia.Include(a => a.Visualizacoes).Include(a => a.Categoria).Where(x => x.Status == "P").OrderByDescending(x => x.Data).Take(6).ToList();
+        }
+
+        public List<Noticia> ListarUltimasDaSemana()
+        {
+            var data = DateTime.Now.AddDays(-7);
+            return Context.Noticia
+                .Include(a => a.Visualizacoes)
+                .Include(a => a.Categoria)
+                .Where(x => x.Status == "P" && x.Data >= data)
+                .OrderByDescending(x => x.Data)
+                .Take(12)
+                .ToList();
         }
 
         public List<Noticia> ListarUltimasSlides()
         {
-            return Context.Noticia.OrderByDescending(x => x.Data).Take(5).ToList();
+            return Context.Noticia.Where(x => x.Status == "P" && x.VaiParaHome == "S").OrderByDescending(x => x.Data).Take(5).ToList();
         }
 
         public Categoria SalvarCategoria(Categoria categoria)
@@ -147,6 +181,6 @@ namespace ProjetoJornal.Repository
             return autor;
         }
 
-       
+
     }
 }

@@ -1,5 +1,4 @@
-﻿
-@using PagedList.Mvc
+﻿@using PagedList.Mvc
 @model  PagedList.IPagedList<ProjetoJornal.Areas.Admin.ViewModel.ListarNoticiasModel>
 <style>
     ul.pagination {
@@ -55,17 +54,13 @@
                     </div>
                     <div class="portlet-body form">
                         <!-- BEGIN FORM-->
-                        <form class="horizontal-form" action="@Url.Action("Index", "Noticias")" method="post">
+                        <form class="horizontal-form" action="@Url.Action("Index", "Noticias")" autocomplete="off" method="get">
+                            <input type="hidden" value="true" name="avancada" id="avancada" />
                             <div class="form-actions">
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Categoria</label>
                                         <select class="form-control" id="selCategoria" placeholder="Selecione uma categoria" name="IdCategoria">
-                                            @*<option value="0">Selecione uma categoria</option>
-                                                @foreach (var categoria in Model.CategoriasListar)
-                                                {
-                                                    <option value="@categoria.IdCategoria%>">@categoria.Nome</option>
-                                                }*@
                                         </select>
                                     </div>
                                 </div>
@@ -73,29 +68,24 @@
                                     <div class="form-group">
                                         <label>Autor</label>
                                         <select class="form-control" id="selAutor" aria-placeholder="Selecione um autor" name="IdAutor">
-                                            @*<option value="0">Selecione um autor</option>
-                                                @foreach (var autor in Model.AutoresListar)
-                                                {
-                                                    <option value="@autor.IdAutor%>">@autor.Nome</option>
-                                                }*@
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Título</label>
-                                        <input type="text" class="form-control" placeholder="Buscar pelo título" name="Titulo" id="titulo">
+                                        <input type="text" class="form-control" placeholder="Buscar pelo título" autocomplete="off" name="Titulo" id="titulo">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Filtrar por período</label>
                                         <div class="input-group input-large date-picker input-daterange" id="datepicker1" data-date="10/11/2012" data-date-format="dd/mm/yyyy">
-                                            <input type="text" class="form-control" name="DataFinal" id="dtinicial">
+                                            <input type="text" class="form-control datepicker" name="DataInicial" autocomplete="off" id="dtinicial">
                                             <span class="input-group-addon">
                                                 até
                                             </span>
-                                            <input type="text" class="form-control" name="DataInicial" id="dtfinal">
+                                            <input type="text" class="form-control datepicker" name="DataFinal" autocomplete="off" id="dtfinal">
                                         </div>
 
                                     </div>
@@ -181,8 +171,11 @@
         jQuery(document).ready(function () {
             popularAutores();
             popularCategorias();
+            $(function () {
+                $(".datepicker").datepicker();
+                // Pass the user selected date format.
+            });
         });
-
        
         function popularAutores() {
             $.ajax({
@@ -215,6 +208,7 @@
                 Titulo: $("#titulo").val(),
                 DataFinal: $("#dtinicial").val(),
                 DataInicial: $("#dtfinal").val(),
+                Avancada: $("#avancada").val()
             };
             $.ajax({
                 type: 'post',

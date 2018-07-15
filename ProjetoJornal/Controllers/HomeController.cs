@@ -37,12 +37,38 @@ namespace ProjetoJornal.Controllers
                 home.MaisVisualizadas = MaisVisualizadas();
                 home.Slides = ListarSlides();
                 home.UltimasHoje = ListarUltimasHoje();
+                home.UltimasDaSemana = ListarUltimasDaSemana();
             }
             catch (Exception ex)
             {
                 throw new HttpException(500, ex.Message);
             }
             return View(home);
+        }
+
+        private List<UltimasModel> ListarUltimasDaSemana()
+        {
+            var model = new List<UltimasModel>();
+            var noticias = _repository.ListarUltimasDaSemana();
+
+            foreach (var item in noticias)
+            {
+                string corpo = _funcoes.RemoveTagsHTML(item.Corpo);
+                model.Add(new UltimasModel
+                {
+                    Categoria = item.Categoria.Descricao,
+                    ClasseCategoria = item.Categoria.Classe,
+                    FotoHome = item.FotoHome,
+                    IdNoticia = item.Id,
+                    Titulo = item.Titulo,
+                    Autor = item.Autor.Nome,
+                    CorpoSubstring = _funcoes.RetornarSubString(150, corpo),
+                    Corpo = corpo,
+                    Visualizacoes = item.Visualizacoes.Quantidade
+                });
+            }
+
+            return model;
         }
 
         private string RetornaImagem(string imagem, string tamanho)

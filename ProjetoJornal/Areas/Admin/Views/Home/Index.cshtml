@@ -6,10 +6,10 @@
             </div>
             <div class="details">
                 <div class="number">
-                    $168,492.54
+                    <span id="span1"></span>
                 </div>
                 <div class="desc">
-                    Lifetime Sales
+                    Total de Visualizações
                 </div>
             </div>
         </a>
@@ -21,10 +21,10 @@
             </div>
             <div class="details">
                 <div class="number">
-                    1,127,390
+                    <span id="span2"></span>
                 </div>
                 <div class="desc">
-                    Total Orders
+                    Total de Notícias publicadas em 7 dias
                 </div>
             </div>
         </a>
@@ -36,59 +36,106 @@
             </div>
             <div class="details">
                 <div class="number">
-                    $670.54
+                    <span id="span3"></span>
                 </div>
                 <div class="desc">
-                    Average Orders
+                    Total de Notícias publicadas
                 </div>
             </div>
         </a>
     </div>
 </div>
 <div class="row">
-    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 margin-bottom-10">
-        <a class="dashboard-stat dashboard-stat-light blue-madison" href="javascript:;">
-            <div class="visual">
-                <i class="fa fa-briefcase fa-icon-medium"></i>
-            </div>
-            <div class="details">
-                <div class="number">
-                    $168,492.54
-                </div>
-                <div class="desc">
-                    Lifetime Sales
-                </div>
-            </div>
-        </a>
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 margin-bottom-10">
+       <div id="container"></div>
     </div>
-    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-        <a class="dashboard-stat dashboard-stat-light red-intense" href="javascript:;">
-            <div class="visual">
-                <i class="fa fa-shopping-cart"></i>
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="panel panel-info">
+            <!-- Default panel contents -->
+            <div class="panel-heading">
+                <h3 class="panel-title">Top 5</h3>
             </div>
-            <div class="details">
-                <div class="number">
-                    1,127,390
-                </div>
-                <div class="desc">
-                    Total Orders
-                </div>
-            </div>
-        </a>
-    </div>
-    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-        <a class="dashboard-stat dashboard-stat-light green-haze" href="javascript:;">
-            <div class="visual">
-                <i class="fa fa-group fa-icon-medium"></i>
-            </div>
-            <div class="details">
-                <div class="number">
-                    $670.54
-                </div>
-                <div class="desc">
-                    Average Orders
-                </div>
-            </div>
-        </a>
+            <!-- List group -->
+            <ul class="list-group" id="itens">
+                
+            </ul>
+        </div>
     </div>
 </div>
+@section Scripts {
+<script src="https://code.highcharts.com/highcharts.src.js"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            popularDashboard();
+        });
+
+        function grafico(dados) {
+
+            var data = [];
+
+            $.each(dados, function (key, value) {
+                var item = {
+                    name: value.Descricao,
+                    y: parseFloat(value.Total) 
+                };
+
+                data.push(item);
+            });
+
+            Highcharts.chart('container', {
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie'
+                },
+                title: {
+                    text: 'Notícias publicadas por categoria'
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: false
+                        },
+                        showInLegend: true
+                    }
+                },
+                series: [{
+                    name: 'Total',
+                    colorByPoint: true,
+                    data: data
+                }]
+            });
+        }
+
+        function grid(dados) {
+            //var data = [];
+            $.each(dados, function (key, value) {
+                var item = '<li class="list-group-item"> ' + value.Titulo + ' <span class="badge badge-success"> ' + value.Visualizacoes+' </span></li>';
+               // data.push(item);
+                $("#itens").append(item);
+            });
+            //$("#itens").html(data);
+        }
+
+        function popularDashboard() {
+            $.ajax({
+                url: "@Url.Action("Dashboard", "Home")",
+                success: function (data) {
+                    console.log(data);
+                    grafico(data.NoticiasPorCategoria);
+                    grid(data.MaisVisualizadas);
+                    $("#span3").html(data.TotalNoticias);
+                    $("#span2").html(data.TotalNoticiasSemana);
+                    $("#span1").html(data.TotalVizualizacoes);
+                }
+            });
+        }
+         
+    </script>
+}

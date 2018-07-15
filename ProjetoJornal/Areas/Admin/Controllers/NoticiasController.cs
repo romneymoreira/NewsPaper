@@ -25,7 +25,7 @@ namespace ProjetoJornal.Areas.Admin.Controllers
             _funcoes = funcoes;
         }
         // GET: Admin/Noticias
-        public ActionResult Index(int? page)
+        public ActionResult Index(int? page, int? idCategoria, int? idAutor, string titulo, DateTime? dataInicial, DateTime? dataFinal, bool? avancada)
         {
             int pageSize = Constantes.PageSize;
             int pageIndex = Constantes.PageIndex;
@@ -34,70 +34,63 @@ namespace ProjetoJornal.Areas.Admin.Controllers
             IPagedList<ListarNoticiasModel> result = null;
             try
             {
-                var noticias = _repository.ListarNoticiasTake(20);
-                foreach (var item in noticias)
+                var noticias = new List<Noticia>();
+                if (avancada.HasValue)
                 {
-                    string corpo = _funcoes.RemoveTagsHTML(item.Corpo);
-                    model.Add(new ListarNoticiasModel
+                    var search = new BuscaModel();
+
+                    if (dataFinal.HasValue)
+                        search.DataFinal = Convert.ToDateTime(dataFinal);
+
+                    if (dataInicial.HasValue)
+                        search.DataInicial = Convert.ToDateTime(dataInicial);
+
+                    if (idAutor.HasValue)
+                        search.IdAutor = Convert.ToInt32(idAutor);
+
+                    if (!string.IsNullOrEmpty(titulo))
+                        search.Titulo = titulo;
+
+                    if (idCategoria.HasValue)
+                        search.IdCategoria = Convert.ToInt32(idCategoria);
+
+                    model = BuscaAvancada(search);
+                }
+                else
+                {
+                    noticias = _repository.ListarNoticiasTake(20);
+                    foreach (var item in noticias)
                     {
-                        Corpo = corpo,
-                        CorpoSubString = _funcoes.RetornarSubString(200, corpo),
-                        Data = item.Data,
-                        FotoHome = item.FotoHome,
-                        Id = item.Id,
-                        IdAutor = item.IdAutor,
-                        IdCategoria = item.IdCategoria,
-                        Status = item.Status,
-                        Titulo = item.Titulo,
-                        VaiParaHome = item.VaiParaHome,
-                        Categoria = item.Categoria?.Descricao,
-                        Autor = item.Autor?.Nome
-                    });
+                        string corpo = _funcoes.RemoveTagsHTML(item.Corpo);
+                        model.Add(new ListarNoticiasModel
+                        {
+                            Corpo = corpo,
+                            CorpoSubString = _funcoes.RetornarSubString(200, corpo),
+                            Data = item.Data.ToLongDateString(),
+                            FotoHome = item.FotoHome,
+                            Id = item.Id,
+                            IdAutor = item.IdAutor,
+                            IdCategoria = item.IdCategoria,
+                            Status = item.Status,
+                            Titulo = item.Titulo,
+                            VaiParaHome = item.VaiParaHome,
+                            Categoria = item.Categoria?.Descricao,
+                            Autor = item.Autor?.Nome
+                        });
+                    }
                 }
             }
             catch (Exception ex)
             {
+                throw new Exception(ex.Message);
             }
             result = model.ToPagedList(pageIndex, pageSize);
             return View(result);
         }
 
-        [HttpPost]
-        public ActionResult Index(BuscaModel search)
+        private List<ListarNoticiasModel> BuscaAvancada(BuscaModel search)
         {
-            int pageSize = 30;
-            int pageIndex = 1;
-            var model = new List<ListarNoticiasModel>();
-            IPagedList<ListarNoticiasModel> result = null;
-            try
-            {
-                var noticias = _repository.ListarNoticiasBuscaAvancada(search);
-                foreach (var item in noticias)
-                {
-                    string corpo = _funcoes.RemoveTagsHTML(item.Corpo);
-                    model.Add(new ListarNoticiasModel
-                    {
-                        Corpo = corpo,
-                        CorpoSubString = _funcoes.RetornarSubString(200, corpo),
-                        Data = item.Data,
-                        FotoHome = item.FotoHome,
-                        Id = item.Id,
-                        IdAutor = item.IdAutor,
-                        IdCategoria = item.IdCategoria,
-                        Status = item.Status,
-                        Titulo = item.Titulo,
-                        VaiParaHome = item.VaiParaHome,
-                        Categoria = item.Categoria?.Descricao,
-                        Autor = item.Autor?.Nome
-                    });
-                }
-            }
-            catch (Exception ex)
-            {
-            }
-            ViewBag.ItensEncontrados = model.Count;
-            result = model.ToPagedList(pageIndex, pageSize);
-            return View("Index", result);
+            return _repository.ListarNoticiasBuscaAvancada(search);
         }
 
         [HttpPost]

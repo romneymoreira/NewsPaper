@@ -1,0 +1,21 @@
+﻿@model ProjetoJornal.ViewModel.IndexModel
+<!-- more from news box -->
+<div class="more-from-news">
+    <h1>Top da semana</h1>
+    <div class="row">
+        @foreach (var item in Model.UltimasDaSemana)
+        {
+            <div class="col-lg-2 col-md-3 col-sm-4 col-6">
+                <div class="news-post thumb-post">
+                    <div class="post-image">
+                        <a href="single-post">
+                            <img src="@item.FotoHome" alt="">
+                        </a>
+                    </div>
+                    <h2><a href="@Url.Action("Post", "Home")?id=@item.IdNoticia">@item.Titulo</a></h2>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<!-- end more from news box -->

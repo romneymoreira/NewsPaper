@@ -159,7 +159,7 @@
                                             <span class="inc"></span>
                                             <span class="check"></span>
                                             <span class="box"></span>
-                                            Enviar para a Home
+                                            Exibir no Slide da Home?
                                         </label>
                                     </div>
                                 </div>
@@ -168,7 +168,7 @@
                         <div class="col-md-12">
                             <div class="form-group" id="divImagem">
                                 <label class="control-label">
-                                    Imagem da home <span class="required">
+                                    Imagem da notícia <span class="required">
                                         *
                                     </span>
                                 </label>
@@ -264,14 +264,14 @@
                 return;
             } else { $(".note-editor").css('border-color', '');}
 
-            if ($("#vaiparahome").val() === 'S'){
-                if ($("#imagemhome").val() === '') {
-                    $("#divImagem").addClass('has-error');
-                    $("#divErros").show();
-                    toastr.error("Se você selecionar a notícia para ir para 'HOME', você deve incluir uma imagem!", "Erro");
-                    return;
-                } else { $("#divImagem").removeClass('has-error'); }
-            }
+            //if ($("#vaiparahome").val() === 'S'){
+            if ($("#imagemhome").val() === '') {
+                $("#divImagem").addClass('has-error');
+                $("#divErros").show();
+                toastr.error("Se você deve adicionar o link da imagem!", "Erro");
+                return;
+            } else { $("#divImagem").removeClass('has-error'); }
+            //}
             //oculta a div erros
             $("#divErros").hide();
 

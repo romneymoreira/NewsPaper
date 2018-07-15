@@ -11,12 +11,13 @@ namespace ProjetoJornal.Repository.Interface
     public interface ISiteRepository
     {
         List<Noticia> ListarNoticiasHome();
+        List<Noticia> ListarUltimasDaSemana();
         List<Noticia> ListarNoticiasMaisVisualizadas();
         List<UltimasHojeModel> ListarNoticiasHoje();
         List<Noticia> ListarUltimasSlides();
         List<Noticia> ListarUltimasNoticias();
         List<Noticia> ListarNoticiasTake(int take);
-        List<Noticia> ListarNoticiasBuscaAvancada(BuscaModel search);
+        List<ListarNoticiasModel> ListarNoticiasBuscaAvancada(BuscaModel search);
         List<Noticia> ListarNoticiasBuscaAvancadaSite(string search);
         List<Autor> ListarAutores();
         List<Categoria> ListarCategorias();

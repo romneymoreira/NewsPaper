@@ -192,6 +192,7 @@
     <Compile Include="Areas\Admin\ViewModel\CadastarAutorModel.cs" />
     <Compile Include="Areas\Admin\ViewModel\CadastrarNoticiaModel.cs" />
     <Compile Include="Areas\Admin\ViewModel\CategoriasListar.cs" />
+    <Compile Include="Areas\Admin\ViewModel\DashboardModel.cs" />
     <Compile Include="Areas\Admin\ViewModel\JsonResultModel.cs" />
     <Compile Include="Areas\Admin\ViewModel\ListarAutoresModel.cs" />
     <Compile Include="Areas\Admin\ViewModel\ListarCategoriasModel.cs" />
@@ -222,6 +223,8 @@
     <Compile Include="Models\Noticia.cs" />
     <Compile Include="Models\Visualizacoes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\DashboardRepository.cs" />
+    <Compile Include="Repository\Interface\IDashboardRepository.cs" />
     <Compile Include="Repository\Interface\ILoginService.cs" />
     <Compile Include="Repository\Interface\ISiteRepository.cs" />
     <Compile Include="Repository\LoginService.cs" />
@@ -5029,6 +5032,7 @@
     <Content Include="Views\Shared\_Menu.cshtml" />
     <Content Include="Views\Shared\_UltimasHoje.cshtml" />
     <Content Include="Views\Home\Publicar.cshtml" />
+    <Content Include="Views\Shared\_UltimasDaSemana.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
