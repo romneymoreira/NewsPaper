@@ -21,6 +21,7 @@
                     <ul class="post-tags">
                         <li><i class="lnr lnr-user"></i>Por <a href="#">@Model.Autor</a></li>
                         <li><i class="lnr lnr-eye"></i>@Model.Visualizacoes Visualizações</li>
+                        <li><i class="fa fa-calendar"></i>@Model.DataPublicacao</li>
                     </ul>
                     @Html.Partial("~/Views/Shared/_Social.cshtml")
                     <img src="upload/blog/lg2.jpg" alt="">
@@ -43,8 +44,8 @@
                         </form>
                     </div>
                     <div class="widget social-widget">
-                        <h1>Stay Connected </h1>
-                        <p>Do you want to be informed everytime with our latest news?</p>
+                        <h1>Fique conectado </h1>
+                        <p>Você quer ser informado toda hora com nossas últimas novidades?</p>
                         <ul class="social-share">
                             <li>
                                 <a href="#" class="rss">
@@ -69,121 +70,6 @@
                                     <i class="fa fa-google-plus"></i>
                                     <span>659</span>
                                 </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="widget slider-widget">
-                        <h1>Featured Posts</h1>
-                        <div class="flexslider">
-                            <ul class="slides">
-                                <li>
-                                    <img alt="" src="upload/blog/s14.jpg" />
-                                    <div class="slider-caption">
-                                        <a href="#" class="category category-tech">Tech</a>
-                                        <h2><a href="single-post.html">Vue js new javascript Framework</a></h2>
-                                        <ul class="post-tags">
-                                            <li><i class="lnr lnr-user"></i>by <a href="#">John Doe</a></li>
-                                            <li><a href="#"><i class="lnr lnr-book"></i><span>23 comments</span></a></li>
-                                            <li><i class="lnr lnr-eye"></i>872 Views</li>
-                                        </ul>
-                                    </div>
-                                </li>
-                                <li>
-                                    <img alt="" src="upload/blog/s13.jpg" />
-                                    <div class="slider-caption">
-                                        <a href="#" class="category category-fashion">Fashion</a>
-                                        <h2><a href="single-post.html">Autumn wear ...</a></h2>
-                                        <ul class="post-tags">
-                                            <li><i class="lnr lnr-user"></i>by <a href="#">John Doe</a></li>
-                                            <li><a href="#"><i class="lnr lnr-book"></i><span>23 comments</span></a></li>
-                                            <li><i class="lnr lnr-eye"></i>872 Views</li>
-                                        </ul>
-                                    </div>
-                                </li>
-                                <li>
-                                    <img alt="" src="upload/blog/s26.jpg" />
-                                    <div class="slider-caption">
-                                        <a href="#" class="category category-world">Business</a>
-                                        <h2><a href="single-post.html">Business title news ...</a></h2>
-                                        <ul class="post-tags">
-                                            <li><i class="lnr lnr-user"></i>by <a href="#">John Doe</a></li>
-                                            <li><a href="#"><i class="lnr lnr-book"></i><span>23 comments</span></a></li>
-                                            <li><i class="lnr lnr-eye"></i>872 Views</li>
-                                        </ul>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="widget news-widget">
-                        <h1>Today Featured</h1>
-                        <ul class="small-posts">
-                            <li>
-                                <a href="single-post.html">
-                                    <img src="upload/blog/th1.jpg" alt="">
-                                </a>
-                                <div class="post-cont">
-                                    <h2><a href="single-post.html">New alternatives are more productive</a></h2>
-                                    <ul class="post-tags">
-                                        <li><i class="lnr lnr-user"></i>by <a href="#">Author</a></li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <li>
-                                <a href="single-post.html">
-                                    <img src="upload/blog/th2.jpg" alt="">
-                                </a>
-                                <div class="post-cont">
-                                    <h2><a href="single-post.html">Vue js new javascript Framework</a></h2>
-                                    <ul class="post-tags">
-                                        <li><i class="lnr lnr-user"></i>by <a href="#">Besim Dauti</a></li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <li>
-                                <a href="single-post.html">
-                                    <img src="upload/blog/th3.jpg" alt="">
-                                </a>
-                                <div class="post-cont">
-                                    <h2><a href="single-post.html">Eating traditional food is more healthy</a></h2>
-                                    <ul class="post-tags">
-                                        <li><i class="lnr lnr-user"></i>by <a href="#">Admin Mag</a></li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <li>
-                                <a href="single-post.html">
-                                    <img src="upload/blog/th4.jpg" alt="">
-                                </a>
-                                <div class="post-cont">
-                                    <h2><a href="single-post.html">Visiting antic countries is John Doe hobby.</a></h2>
-                                    <ul class="post-tags">
-                                        <li><i class="lnr lnr-user"></i>by <a href="#">Helena Doe</a></li>
-                                    </ul>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="widget news-widget">
-                        <h1>Last news as list titles...</h1>
-                        <ul class="list-news">
-                            <li>
-                                <h2><a href="single-post.html">Technology Remote Jobs</a></h2>
-                            </li>
-                            <li>
-                                <h2><a href="single-post.html">United States celebrate</a></h2>
-                            </li>
-                            <li>
-                                <h2><a href="single-post.html">Fruits and Vegetables</a></h2>
-                            </li>
-                            <li>
-                                <h2><a href="single-post.html">New alternatives are more productive</a></h2>
-                            </li>
-                            <li>
-                                <h2><a href="single-post.html">Traditional food</a></h2>
-                            </li>
-                            <li>
-                                <h2><a href="single-post.html">Hapier Child</a></h2>
                             </li>
                         </ul>
                     </div>

@@ -19,6 +19,7 @@ namespace ProjetoJornal.Base
         public const string UrlProjeto = "http://localhost:57914";
 
         public const int PageSize = 10;
+        public const int PageSizeCategoria = 12;
         public const int PageIndex = 1;
     }
 }

@@ -91,6 +91,7 @@
             </div>
             <div class="portlet-body form">
                 <form role="form" id="formnoticia" novalidate="novalidate">
+                    <input type="hidden" name="Model.Id" id="idNoticia" />
                     <div class="form-body">
                         <div class="col-md-12 alert alert-danger" id="divErros" style="display:none;">
                             Existem campos obrigatórios sem preenchimento.
@@ -282,6 +283,7 @@
                 Status: $("#selStatus").val(),
                 FotoHome: $("#imagemhome").val(),
                 Titulo: $("#titulo").val(),
+                Id: $("#idNoticia").val(),
                 Corpo: $('#corpo').code(),
             };
             $.ajax({
@@ -373,8 +375,12 @@
                 focus: true, // set focus to editable area after initializing summernote
             });
 
+            //seta o Id
+            $("#idNoticia").val(@Model.Id);
+
             if (@Model.Id > 0) {
-                 $("#selCategoria").val('@Model.IdCategoria');
+                $("#selCategoria").val('@Model.IdCategoria');
+                $("#selStatus").val('@Model.Status');
                 $("#selAutor").val('@Model.IdAutor');
                 if ('@Model.VaiParaHome' == 'S')
                     $("#checkboxVaiParaHome").attr('checked', true);

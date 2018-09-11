@@ -48,7 +48,17 @@ namespace ProjetoJornal.Repository
         }
         public List<Noticia> ListarNoticiasTake(int take)
         {
-            return Context.Noticia.Where(x => x.Status == "P").OrderByDescending(x => x.Data).Take(take).ToList();
+            return Context.Noticia.OrderByDescending(x => x.Data).Take(take).ToList();
+        }
+
+        public List<Noticia> ListarNoticiasPorCategoria(int categoria)
+        {
+            return Context.Noticia
+               .Include(x => x.Visualizacoes)
+               .Include(x => x.Autor)
+               .Include(x => x.Categoria)
+               .Where(x => x.IdCategoria == categoria)
+               .OrderByDescending(x => x.Data).Take(100).ToList();
         }
 
         public List<Noticia> ListarNoticiasBuscaAvancadaSite(string search)
@@ -57,7 +67,7 @@ namespace ProjetoJornal.Repository
                 .Include(x => x.Visualizacoes)
                 .Include(x => x.Autor)
                 .Include(x => x.Categoria)
-                .Where(x => x.Status == "P" && x.Titulo.ToLower().Contains(search.ToLower()) || x.Corpo.ToLower().Contains(search.ToLower()))
+                .Where(x => x.Titulo.ToLower().Contains(search.ToLower()) || x.Corpo.ToLower().Contains(search.ToLower()))
                 .OrderByDescending(x => x.Data).ToList();
         }
         public List<ListarNoticiasModel> ListarNoticiasBuscaAvancada(BuscaModel search)

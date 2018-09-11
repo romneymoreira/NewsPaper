@@ -329,6 +329,7 @@ namespace ProjetoJornal.Areas.Admin.Controllers
                 model.FotoHome = noticia.FotoHome;
                 model.Id = noticia.Id;
                 model.IdAutor = noticia.IdAutor;
+                model.Status = noticia.Status;
                 model.IdCategoria = noticia.IdCategoria;
                 model.Titulo = noticia.Titulo;
                 model.VaiParaHome = noticia.VaiParaHome;

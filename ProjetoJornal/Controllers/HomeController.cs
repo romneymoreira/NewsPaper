@@ -180,6 +180,50 @@ namespace ProjetoJornal.Controllers
             return View(result);
         }
 
+
+        [HttpGet]
+        public ActionResult Categoria(int? page, int categoria)
+        {
+            int pageSize = Constantes.PageSizeCategoria;
+            int pageIndex = Constantes.PageIndex;
+            pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
+            var model = new List<CategoriaSiteModel>();
+            IPagedList<CategoriaSiteModel> result = null;
+
+            var noticias = _repository.ListarNoticiasPorCategoria(categoria);
+
+            foreach (var item in noticias)
+            {
+                string corpo = _funcoes.RemoveTagsHTML(item.Corpo);
+                model.Add(new CategoriaSiteModel
+                {
+                    Corpo = corpo,
+                    CorpoSubString = _funcoes.RetornarSubString(300, corpo),
+                    Data = item.Data,
+                    FotoHome = item.FotoHome,
+                    ClasseCategoria = item.Categoria.Classe,
+                    Id = item.Id,
+                    Visualizacoes = item.Visualizacoes != null ? item.Visualizacoes.Quantidade : 0,
+                    IdAutor = item.IdAutor,
+                    IdCategoria = item.IdCategoria,
+                    Status = item.Status,
+                    Titulo = item.Titulo,
+                    VaiParaHome = item.VaiParaHome,
+                    Categoria = item.Categoria?.Descricao,
+                    Autor = item.Autor?.Nome,
+                    DataPublicacao = item.Data.ToLongDateString()
+            });
+            }
+            var cat = noticias.FirstOrDefault();
+            ViewBag.IdCategoria = categoria;
+            ViewBag.Categoria = cat != null ? cat.Categoria?.Descricao : "";
+            ViewBag.ItensEncontrados = model.Count;
+
+            result = model.ToPagedList(pageIndex, pageSize);
+
+            return View(result);
+        }
+
         [HttpPost]
         public ActionResult Busca2(string busca)
         {
@@ -239,6 +283,7 @@ namespace ProjetoJornal.Controllers
                 model.Autor = noticia.Autor?.Nome;
                 model.Categoria = noticia.Categoria?.Descricao;
                 model.Visualizacoes = clicks;
+                model.DataPublicacao = noticia.Data.ToLongDateString();
 
                 return View(model);
             }

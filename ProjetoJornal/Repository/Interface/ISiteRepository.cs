@@ -19,6 +19,7 @@ namespace ProjetoJornal.Repository.Interface
         List<Noticia> ListarNoticiasTake(int take);
         List<ListarNoticiasModel> ListarNoticiasBuscaAvancada(BuscaModel search);
         List<Noticia> ListarNoticiasBuscaAvancadaSite(string search);
+        List<Noticia> ListarNoticiasPorCategoria(int categoria);
         List<Autor> ListarAutores();
         List<Categoria> ListarCategorias();
         Categoria ObterCategoriaPorId(int idCategoria);

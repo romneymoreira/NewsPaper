@@ -230,6 +230,7 @@
     <Compile Include="Repository\LoginService.cs" />
     <Compile Include="Repository\SiteRepository.cs" />
     <Compile Include="ViewModel\BuscaAvancadaSiteModel.cs" />
+    <Compile Include="ViewModel\CategoriaSiteModel.cs" />
     <Compile Include="ViewModel\ImagensAdicionadasModel.cs" />
     <Compile Include="ViewModel\IndexModel.cs" />
     <Compile Include="ViewModel\MaisVisualizadasModel.cs" />
@@ -5033,6 +5034,7 @@
     <Content Include="Views\Shared\_UltimasHoje.cshtml" />
     <Content Include="Views\Home\Publicar.cshtml" />
     <Content Include="Views\Shared\_UltimasDaSemana.cshtml" />
+    <Content Include="Views\Home\Categoria.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
